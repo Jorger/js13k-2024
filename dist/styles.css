@@ -1,1 +1,1 @@
-.classText{color:red}
+*{margin:0;padding:0}body,html{background:#000;font-family:Arial;overflow:hidden;overscroll-behavior-x:none;position:fixed;-webkit-user-select:none;user-select:none}div{box-sizing:border-box}.wh{height:100%;width:100%}.jc{align-items:center;display:flex;justify-content:center}.game{background-color:#008ef2;position:relative}.clock{background-color:hsla(0,0%,100%,.6);border-radius:50%;position:absolute}.clock.active{background-color:rgba(0,0,0,.6)}.game-t{background-color:red;position:absolute;top:0;width:100%;z-index:2}
