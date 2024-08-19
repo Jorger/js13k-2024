@@ -1,14 +1,14 @@
-import './styles.css';
-import { $, setHtml } from './utils/helpers';
-import { ROOT } from './utils/constants';
-import Container from './components/container';
-import Game from './components/game';
+import "./styles.css";
+import { $, setHtml } from "./utils/helpers";
+import { ROOT } from "./utils/constants";
+import Container from "./components/container";
+import Game from "./components/game";
 // import { PlaySound } from './utils/sounds';
 // import Screen from './screens/index';
 
 setHtml($(`#${ROOT}`), Container());
 
-Game({ level: 0 });
+Game({ level: 2 });
 
 // $on(document as any, 'contextmenu', (event) => event.preventDefault());
 

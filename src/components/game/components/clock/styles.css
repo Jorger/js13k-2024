@@ -1,9 +1,50 @@
 .clock {
-  position: absolute;
+  --bc: var(--bs);
+  --ci: radial-gradient(circle, var(--bc) 30%, rgba(0, 0, 0, 0) 0);
+
+  background-color: var(--whi);
+  background-image: var(--ci);
+  background-position: 50% 50%;
+  background-repeat: no-repeat;
+  background-size: 50% 50%;
   border-radius: 50%;
-  background-color: rgba(255, 255, 255, 0.6);
+  border: 3px solid var(--whi);
+  position: absolute;
+}
+
+.clock::before {
+  animation: rotate var(--s) linear infinite;
+  animation-direction: var(--d);
+  animation-play-state: running;
+  background: var(--bc);
+  content: "";
+  height: 50%;
+  left: 47%;
+  position: absolute;
+  top: 0;
+  transform-origin: bottom center;
+  width: 5%;
 }
 
 .clock.active {
+  --bc: var(--whi);
+  --cn: radial-gradient(circle, var(--bs) 30%, rgba(0, 0, 0, 0) 0);
   background-color: rgba(0, 0, 0, 0.6);
+  background-image: var(--ci), var(--cn), var(--cn), var(--cn), var(--cn);
+  background-position: 50% 50%, 50% 2%, 50% 98%, 2% 50%, 98% 50%;
+  background-size: 50% 50%, 15% 15%, 15% 15%, 15% 15%, 15% 15%;
+  border: none;
+}
+
+.clock.active::before {
+  background: var(--bc);
+}
+
+@keyframes rotate {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
 }
