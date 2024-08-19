@@ -13,6 +13,15 @@ export const setHtml = (element: HTMLElement | null, html: string) => {
   }
 };
 
+/**
+ * Devuleve un número "aleatorio", dado un rango...
+ * @param min
+ * @param max
+ * @returns
+ */
+export const randomNumber = (min: number, max: number) =>
+  Math.floor(Math.random() * (max - min + 1)) + min;
+
 // export const addStyle = (
 //   target: null | HTMLElement,
 //   styles: Record<string, string>

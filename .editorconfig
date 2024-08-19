@@ -1,0 +1,14 @@
+# Archivo .editorconfig básico
+
+# Indentación con espacios (2 espacios)
+[*]
+indent_style = space
+indent_size = 2
+
+# Cualquier archivo JavaScript
+[*.js]
+# Usar comillas dobles para cadenas (strings)
+quote_type = double
+
+# Agregar coma al final de la última propiedad en objetos y arrays
+insert_final_newline = true

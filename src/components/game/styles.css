@@ -1,8 +1,5 @@
 .game {
-  background-color: #008ef2;
+  background-color: var(--bs);
   position: relative;
-}
-
-/* .game-c {
   cursor: pointer;
-} */
+}
