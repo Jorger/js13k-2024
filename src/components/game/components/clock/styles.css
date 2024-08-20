@@ -10,33 +10,57 @@
   border-radius: 50%;
   border: 3px solid var(--whi);
   position: absolute;
+  opacity: 0.8;
 }
 
-.clock::before {
+.clock::before,
+.clock.a::after {
   animation: rotate var(--s) linear infinite;
   animation-direction: var(--d);
   animation-play-state: running;
-  background: var(--bc);
   content: "";
+  position: absolute;
+  transform-origin: bottom center;
+}
+
+.clock::before {
+  background: var(--bc);
   height: 50%;
   left: 47%;
-  position: absolute;
   top: 0;
-  transform-origin: bottom center;
   width: 5%;
 }
 
-.clock.active {
+.clock.a::after {
+  height: 60%;
+  left: 43%;
+  top: -10%;
+  width: 13%;
+  background-image: linear-gradient(
+      to left bottom,
+      transparent 50%,
+      var(--whi) 0
+    ),
+    linear-gradient(to right bottom, transparent 50%, var(--whi) 0);
+  background-size: 50% 17%;
+  background-position: 100% 0, 0 0;
+  background-repeat: no-repeat;
+}
+
+.clock.a {
   --bc: var(--whi);
   --cn: radial-gradient(circle, var(--bs) 30%, rgba(0, 0, 0, 0) 0);
   background-color: rgba(0, 0, 0, 0.6);
+  /* Se puede crear dinamicamente */
   background-image: var(--ci), var(--cn), var(--cn), var(--cn), var(--cn);
   background-position: 50% 50%, 50% 2%, 50% 98%, 2% 50%, 98% 50%;
   background-size: 50% 50%, 15% 15%, 15% 15%, 15% 15%, 15% 15%;
   border: none;
+  z-index: 10;
+  opacity: 1;
 }
 
-.clock.active::before {
+.clock.a::before {
   background: var(--bc);
 }
 

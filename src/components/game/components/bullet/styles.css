@@ -1,0 +1,13 @@
+.bullet {
+  position: absolute;
+  /* /* se puede crer sólo una clase para el border radius y reusar */
+  border-radius: 50%;
+  background-color: red;
+  opacity: 0.6;
+  z-index: 11;
+  /* display: none; */
+}
+
+.bullet.a {
+  display: block;
+}

@@ -1,4 +1,5 @@
-import Clock from './clock';
-import Toolbar from './toolbar';
+import Bullet from "./bullet";
+import Clock from "./clock";
+import Toolbar from "./toolbar";
 
-export { Clock, Toolbar };
+export { Bullet, Clock, Toolbar };

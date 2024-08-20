@@ -22,13 +22,28 @@ export const setHtml = (element: HTMLElement | null, html: string) => {
 export const randomNumber = (min: number, max: number) =>
   Math.floor(Math.random() * (max - min + 1)) + min;
 
-// export const addStyle = (
-//   target: null | HTMLElement,
-//   styles: Record<string, string>
-// ): void => {
+export const generateUUID = () =>
+  "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx".replace(/[xy]/g, (c) => {
+    const r = (Math.random() * 16) | 0;
+    const v = c === "x" ? r : (r & 0x3) | 0x8;
+    return v.toString(16);
+  });
+
+// const addClass = (target: HTMLElement, className = "") => {
 //   if (target) {
-//     for (const style in styles) {
-//       target.style[style as any] = styles[style];
-//     }
+//     className.split(" ").forEach((classText) => {
+//       target.classList.add(classText);
+//     });
 //   }
 // };
+
+export const addStyle = (
+  target: null | HTMLElement,
+  styles: Record<string, string>
+): void => {
+  if (target) {
+    for (const style in styles) {
+      target.style[style as any] = styles[style];
+    }
+  }
+};
