@@ -29,13 +29,21 @@ export const generateUUID = () =>
     return v.toString(16);
   });
 
-// const addClass = (target: HTMLElement, className = "") => {
-//   if (target) {
-//     className.split(" ").forEach((classText) => {
-//       target.classList.add(classText);
-//     });
-//   }
-// };
+export const addClass = (target: HTMLElement, className = "") => {
+  if (target) {
+    className.split(" ").forEach((classText) => {
+      target.classList.add(classText);
+    });
+  }
+};
+
+export const removeClass = (target: HTMLElement, className = "") => {
+  if (target) {
+    className.split(" ").forEach((classText) => {
+      target.classList.remove(classText);
+    });
+  }
+};
 
 export const addStyle = (
   target: null | HTMLElement,
@@ -46,4 +54,15 @@ export const addStyle = (
       target.style[style as any] = styles[style];
     }
   }
+};
+
+export const isMobile = (): boolean =>
+  /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+
+export const debounce = (fn: Function, delay: number) => {
+  var t: number;
+  return function () {
+    clearTimeout(t);
+    t = setTimeout(fn, delay);
+  };
 };

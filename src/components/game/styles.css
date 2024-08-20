@@ -1,5 +1,4 @@
 .game {
-  background-color: var(--bs);
   position: relative;
   cursor: pointer;
 }

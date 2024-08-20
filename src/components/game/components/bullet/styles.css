@@ -2,12 +2,37 @@
   position: absolute;
   /* /* se puede crer sólo una clase para el border radius y reusar */
   border-radius: 50%;
-  background-color: red;
-  opacity: 0.6;
+  /* border: 1px solid red; */
+  opacity: 0;
+  /* transition: all 100ms linear; */
+  /* display: none; */
+  background-color: var(--whi);
   z-index: 11;
   /* display: none; */
 }
 
+/* TODO: Borrar */
+.tmppath {
+  border-radius: 50%;
+  border: 1px solid white;
+  opacity: 0.2;
+  position: absolute;
+  z-index: 11;
+}
+
+/* .bullet2, */
+/* .bullet2 {
+  border: 1px solid black;
+  z-index: 11;
+}
+
+.bullet {
+  background-color: red;
+  z-index: 20;
+} */
+
 .bullet.a {
-  display: block;
+  /* display: block; */
+  transition: transform 100ms linear;
+  opacity: 1;
 }
