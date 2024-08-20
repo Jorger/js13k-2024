@@ -18,6 +18,7 @@ body {
   position: fixed;
   -webkit-user-select: none;
   user-select: none;
+  -webkit-tap-highlight-color: transparent;
 }
 
 div {

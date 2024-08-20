@@ -1,8 +1,9 @@
 import "./styles.css";
-import { $, setHtml } from "./utils/helpers";
+import { $, $on, setHtml } from "./utils/helpers";
 import { ROOT } from "./utils/constants";
 import Container from "./components/container";
 import Game from "./components/game";
+import onWindowResize from "./utils/resize-screen";
 // import { PlaySound } from './utils/sounds';
 // import Screen from './screens/index';
 
@@ -10,7 +11,10 @@ setHtml($(`#${ROOT}`), Container());
 
 Game({ level: 2 });
 
-// $on(document as any, 'contextmenu', (event) => event.preventDefault());
+$on(document as any, "contextmenu", (event) => event.preventDefault());
+
+window.addEventListener("resize", onWindowResize);
+onWindowResize();
 
 // const onClickEvent = (e: MouseEvent) => {
 //   const target = e.target as Element;

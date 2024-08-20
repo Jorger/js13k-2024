@@ -1,7 +1,46 @@
 .game-t {
+  align-items: center;
+  color: var(--whi);
+  display: flex;
+  justify-content: space-between;
+  padding: 10px 20px;
   position: absolute;
-  width: 100%;
   top: 0;
-  background-color: red;
+  width: 100%;
+  width: 100%;
   z-index: 2;
+}
+
+.game-t .t {
+  display: flex;
+  justify-content: center;
+}
+
+.game-t .c {
+  font-size: 30px;
+  margin-left: 10px;
+}
+
+.game-t .s {
+  font-size: 23px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.game-t .s span {
+  display: block;
+  font-size: 13px;
+}
+
+.game-t .bt {
+  background-color: var(--whi);
+  border-radius: 50%;
+  border: none;
+  color: var(--bs);
+  cursor: pointer;
+  font-size: 30px;
+  height: 45px;
+  opacity: 0.8;
+  width: 45px;
 }
