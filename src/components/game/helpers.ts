@@ -1,18 +1,20 @@
 import { Bullet, Clock } from "./components";
-import { getLevel } from "../../levels";
+import { getLevel, getTotalLevels } from "../../levels";
+import { HEIGHT, WIDTH } from "../../utils/constants";
 import {
   $,
   $$,
   $on,
   addClass,
   addStyle,
+  delay,
   generateUUID,
   randomNumber,
   removeClass,
   setHtml,
 } from "../../utils/helpers";
-import { HEIGHT, WIDTH } from "../../utils/constants";
 
+const TOTAL_LEVELS = getTotalLevels();
 const BASE_RENDER = ".game-c";
 const BULLET_SIZE = 10;
 let CLOCK_ACTIVE = -1;
@@ -21,6 +23,9 @@ let CLOCKS: (string | number | boolean)[][];
 let START_TIME: number = 0;
 let INTERVAL_CHRONOMETER: NodeJS.Timeout | null;
 let chronometerElement: HTMLElement | null;
+let LEVEL_STATUS: "default" | "passed" | "lost" | "finalized" = "default";
+let currentLevel = 0;
+// let gameOver = false;
 
 const normalizeAngle = (angle = 0) => ((angle % 360) + 360) % 360;
 
@@ -160,16 +165,14 @@ const shootBullet = async () => {
     currentX += directionX;
     currentY += directionY;
 
+    // TODO: Quitar cuando se haga el debug de las colisiones
     const newDiv = document.createElement("div");
-
     // Aplicar el transform al div
     newDiv.style.transform = `translate(${currentX}px, ${currentY}px)`;
     newDiv.style.width = `${BULLET_SIZE}px`;
     newDiv.style.height = `${BULLET_SIZE}px`;
-
     // Aplicar la clase al div
     newDiv.className = "tmppath";
-
     $(BASE_RENDER)?.append(newDiv);
 
     for (let i = 0; i < obstacles.length; i++) {
@@ -287,7 +290,9 @@ const shootBullet = async () => {
     const gameOver = clocksAvailable === 1;
     const newClassNames = "a" + (gameOver ? " s" : "");
 
-    // console.log({ newClassNames });
+    if (gameOver) {
+      LEVEL_STATUS = MAX_TIME > 0 ? "passed" : "finalized";
+    }
 
     addClass($(`#${CLOCKS[CLOCK_ACTIVE][3]}`) as HTMLElement, newClassNames);
     removeClass(bullet, "a");
@@ -302,7 +307,23 @@ const shootBullet = async () => {
       transform: `translate(${newStartX}px, ${newStarty}px)`,
     });
   } else {
+    LEVEL_STATUS = "lost";
     stopChronometer();
+  }
+
+  console.log({ LEVEL_STATUS });
+  if (LEVEL_STATUS !== "default") {
+    await delay(600);
+    const classNameModal = `a${LEVEL_STATUS === "lost" ? " l" : ""}`;
+    addClass($(".game-o") as HTMLElement, classNameModal);
+
+    if (LEVEL_STATUS === "lost") {
+      $(".game-o .me h3")!.textContent = `Level ${currentLevel + 1} Failed`;
+    }
+
+    // ($(".game-o .ti") as HTMLElement).style.display = "none";
+
+    console.log({ LEVEL_STATUS, currentLevel });
   }
 };
 
@@ -322,7 +343,7 @@ const loadLevel = (level = 0) => {
    */
   CLOCK_ACTIVE = data[0] as number;
   MAX_TIME = data[1] as number;
-  chronometerElement!.textContent = `${MAX_TIME}s`;
+  chronometerElement!.textContent = `${MAX_TIME}`;
 
   /**
    * Tiempo inicial en el que se carga el nivel,
@@ -368,25 +389,29 @@ const stopChronometer = () => {
 const startChronometer = () => {
   stopChronometer();
 
-  chronometerElement!.textContent = `${MAX_TIME}s`;
+  chronometerElement!.textContent = `${MAX_TIME}`;
 
-  INTERVAL_CHRONOMETER = setInterval(() => {
-    MAX_TIME--;
-
-    if (MAX_TIME >= 0) {
-      chronometerElement!.textContent = `${MAX_TIME}s`;
-    } else {
-      stopChronometer();
-    }
-  }, 1000);
+  if (MAX_TIME > 0) {
+    INTERVAL_CHRONOMETER = setInterval(() => {
+      if (MAX_TIME - 1 >= 0) {
+        MAX_TIME--;
+        chronometerElement!.textContent = `${MAX_TIME}`;
+      } else {
+        // TODO: quitar el cronometro cuando llega a cero
+        // $(".game-t .t")
+        stopChronometer();
+      }
+    }, 1000);
+  }
 };
 
 export const initComponent = (level = 0) => {
+  currentLevel = level;
   chronometerElement = $(".game-t .c");
-  loadLevel(level);
+  loadLevel(currentLevel);
 
   $on($(BASE_RENDER) as HTMLElement, "click", () => {
-    if (CLOCK_ACTIVE >= 0) {
+    if (LEVEL_STATUS === "default" && CLOCK_ACTIVE >= 0) {
       shootBullet();
 
       if (!INTERVAL_CHRONOMETER && MAX_TIME > 0) {
@@ -395,24 +420,44 @@ export const initComponent = (level = 0) => {
     }
   });
 
-  // Para el toolbar
-  const pauseButton = $(".game-t .bt") as HTMLElement;
+  $$("button").forEach((button) => {
+    $on(button as HTMLButtonElement, "click", (e) => {
+      const action = e.target.id;
 
-  if (pauseButton) {
-    $on(pauseButton, "click", () => {
-      // console.log("PAUSA");
-      stopChronometer();
-      loadLevel(level);
+      if (["pause", "run", "next"]) {
+        stopChronometer();
+      }
+
+      if (["play", "next", "run"].includes(action)) {
+        removeClass($(".game-o") as HTMLElement, "a l");
+      }
+
+      if (action === "pause") {
+        addClass($(".game-o") as HTMLElement, "a");
+        $(".game-o .ti h3")!.textContent = `Level - ${currentLevel + 1}`;
+      }
+
+      if (action === "play") {
+        // TODO: revisar que no se inicie el tiempo si no se había hecho lanzamiento
+        startChronometer();
+      }
+
+      if (action === "run") {
+        LEVEL_STATUS = "default";
+        loadLevel(currentLevel);
+      }
+
+      if (action === "next") {
+        if (currentLevel + 1 < TOTAL_LEVELS) {
+          currentLevel++;
+          LEVEL_STATUS = "default";
+          loadLevel(currentLevel);
+        }
+      }
+
+      if (action === "main") {
+        console.log("Ir al lobby");
+      }
     });
-  }
-
-  // console.clear();
-
-  // const interval = setInterval(() => {
-  //   if (CLOCK_ACTIVE >= 0) {
-  //     shootBullet();
-  //   }
-  // }, 100);
-
-  // Se debe agregar el evento click al escenario y a los botones que se requieran
+  });
 };
