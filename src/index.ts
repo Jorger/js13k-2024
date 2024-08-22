@@ -9,7 +9,7 @@ import onWindowResize from "./utils/resize-screen";
 
 setHtml($(`#${ROOT}`), Container());
 
-Game({ level: 0 });
+Game({ l: 0 });
 
 $on(document as any, "contextmenu", (event) => event.preventDefault());
 

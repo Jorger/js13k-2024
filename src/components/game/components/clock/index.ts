@@ -1,5 +1,6 @@
 import "./styles.css";
 
+// TODO: remover el indice..
 export default ([x, y, size, id, direction, speed, active]: (
   | string
   | number
