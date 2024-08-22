@@ -2,14 +2,14 @@ import "./styles.css";
 import { $, $on, setHtml } from "./utils/helpers";
 import { ROOT } from "./utils/constants";
 import Container from "./components/container";
-import Game from "./components/game";
 import onWindowResize from "./utils/resize-screen";
+import Screen from "./Screen";
 // import { PlaySound } from './utils/sounds';
-// import Screen from './screens/index';
 
 setHtml($(`#${ROOT}`), Container());
 
-Game({ l: 0 });
+// Screen();
+Screen("Progress");
 
 $on(document as any, "contextmenu", (event) => event.preventDefault());
 
@@ -24,7 +24,6 @@ onWindowResize();
 // };
 
 // $on(window as any, 'click', onClickEvent);
-// Screen('Lobby');
 
 // console.log(
 //   '%cGame developed by Jorge Rubiano.',

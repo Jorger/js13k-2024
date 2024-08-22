@@ -7,11 +7,9 @@
   background-position: 50% 50%;
   background-repeat: no-repeat;
   background-size: 50% 50%;
-  border-radius: 50%;
   border: 3px solid var(--whi);
   position: absolute;
   opacity: 0.8;
-  box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
   /* box-shadow: rgba(60, 64, 67, 0.3) 0px 1px 2px 0px,
     rgba(60, 64, 67, 0.15) 0px 1px 3px 1px; */
   /* box-shadow: rgba(0, 0, 0, 0.18) 0px 2px 4px; */

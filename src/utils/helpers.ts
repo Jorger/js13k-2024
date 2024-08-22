@@ -69,3 +69,14 @@ export const debounce = (fn: Function, delay: number) => {
 
 export const delay = (ms: number) =>
   new Promise((resolve) => setTimeout(resolve, ms));
+
+export const eventButton = (cb: (id: string) => void) => {
+  $$("button").forEach((button) => {
+    $on(button as HTMLButtonElement, "click", (e) => {
+      cb(e.target.id);
+    });
+  });
+};
+
+export const fillArray = (length = 1) =>
+  Array.from({ length }, (_, index) => index);

@@ -1,0 +1,26 @@
+.car {
+  overflow: hidden;
+  position: relative;
+  width: 90%;
+}
+
+/* Contenedor de los slides */
+.car-w {
+  display: flex;
+  scroll-snap-type: x mandatory;
+  overflow-x: auto;
+  scroll-behavior: smooth;
+  width: 100%;
+  height: 510px;
+}
+
+/* Cada slide */
+.car-s {
+  flex: none;
+  scroll-snap-align: start;
+}
+
+/* Para que el scroll no se vea al tener overflow:hidden en el contenedor */
+.car-w::-webkit-scrollbar {
+  display: none;
+}

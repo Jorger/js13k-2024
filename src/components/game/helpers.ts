@@ -3,16 +3,17 @@ import { getLevel, getTotalLevels } from "../../levels";
 import { HEIGHT, WIDTH } from "../../utils/constants";
 import {
   $,
-  $$,
   $on,
   addClass,
   addStyle,
   delay,
+  eventButton,
   generateUUID,
   randomNumber,
   removeClass,
   setHtml,
 } from "../../utils/helpers";
+import Screen from "../../Screen";
 
 const TOTAL_LEVELS = getTotalLevels();
 const BASE_RENDER = ".game-c";
@@ -27,7 +28,7 @@ let LEVEL_STATUS: "default" | "passed" | "lost" | "finalized" = "default";
 let currentLevel = 0;
 // let gameOver = false;
 
-const normalizeAngle = (angle = 0) => ((angle % 360) + 360) % 360;
+// const normalizeAngle = (angle = 0) => ((angle % 360) + 360) % 360;
 
 /**
  * Generar información aleatoria para los relojes...
@@ -45,8 +46,7 @@ const getClockProperties = () => {
 };
 
 /**
- * Obtiene el ángulo dependiendo del tiempo transcurrido,
- * aplicable para safari...
+ * Obtiene el ángulo dependiendo del tiempo transcurrido
  * @param animationDuration
  * @param direction
  * @returns
@@ -86,47 +86,72 @@ const getBulletPosition = () => {
  * Devuelve el ángulo del reloj que está activado...
  * @returns
  */
-const getClockAngle = () => {
-  const [, , , id, direction, speed] = CLOCKS[CLOCK_ACTIVE];
-  const element = $(`#${id}`) as HTMLDivElement;
+// TODO: revusar si se puede dejar sólo una lógica y potencialmente,
+// se podría eliminar esta función o simplificarla...
+// const getClockAngle = () => {
+//   const [, , , id, direction, speed] = CLOCKS[CLOCK_ACTIVE];
+//   const element = $(`#${id}`) as HTMLDivElement;
 
-  // Obtener el ángulo actual del pseudo-elemento
-  const style = window.getComputedStyle(element, "::before");
-  const transform = style.transform;
+//   // Obtener el ángulo actual del pseudo-elemento
+//   const style = window.getComputedStyle(element, "::before");
+//   const transform = style.transform;
 
-  let angle = 0;
+//   let angle = 0;
 
-  /**
-   * Se busca el transform en el before, en caso que no exista,
-   * se calcula de otra forma el ángulo, se evidenció que safari
-   * no toma los valores del pseudo elemento...
-   */
-  if (transform && transform !== "none") {
-    const values = transform.split("(")[1].split(")")[0].split(",");
-    const a = +values[0];
-    const b = +values[1];
-    angle = normalizeAngle(Math.round(Math.atan2(b, a) * (180 / Math.PI)));
-  } else {
-    /**
-     * Se obtiene el ángulo a través del tiempo transcurrido de giro...
-     */
-    angle = getCurrentRotationAngle(speed as number, direction as string);
-  }
+//   /**
+//    * Se busca el transform en el before, en caso que no exista,
+//    * se calcula de otra forma el ángulo, se evidenció que safari
+//    * no toma los valores del pseudo elemento...
+//    */
+//   if (transform && transform !== "none") {
+//     const values = transform.split("(")[1].split(")")[0].split(",");
+//     const a = +values[0];
+//     const b = +values[1];
+//     angle = normalizeAngle(Math.round(Math.atan2(b, a) * (180 / Math.PI)));
+//   } else {
+//     /**
+//      * Se obtiene el ángulo a través del tiempo transcurrido de giro...
+//      */
+//     angle = getCurrentRotationAngle(speed as number, direction as string);
+//   }
 
-  angle = getCurrentRotationAngle(speed as number, direction as string);
+//   return getCurrentRotationAngle(speed as number, direction as string);
+// };
 
-  return angle;
-};
+// const getClockAngle = () => {
+//   // const [, , , id, direction, speed] = CLOCKS[CLOCK_ACTIVE];
+//   /*
+//   return [
+//       x,
+//       y,
+//       size,
+//       `c-${generateUUID()}`,
+//       direction,
+//       speed,
+//       i === CLOCK_ACTIVE,
+//     ];
+//   */
+
+//   return getCurrentRotationAngle(
+//     CLOCKS[CLOCK_ACTIVE][5] as number,
+//     CLOCKS[CLOCK_ACTIVE][4] as string
+//   );
+// };
 
 /**
  * Función que realiza la acción de disprar el elemento del reloj que está girando
  */
 const shootBullet = async () => {
-  console.clear();
+  // console.clear();
   /**
    * Se obtiene el ángulo actual del reloj activo,
    */
-  const clockAngle = getClockAngle();
+  // const clockAngle = getClockAngle();
+  const clockAngle = getCurrentRotationAngle(
+    CLOCKS[CLOCK_ACTIVE][5] as number,
+    CLOCKS[CLOCK_ACTIVE][4] as string
+  );
+
   const radians = (clockAngle - 90) * (Math.PI / 180);
   /**
    * Se obtiene la posición de la bala, la cual es relativa a la posición
@@ -134,7 +159,7 @@ const shootBullet = async () => {
    */
   const [startX, startY] = getBulletPosition();
 
-  console.log({ clockAngle });
+  // console.log({ clockAngle });
 
   /**
    * Dirección en la que apunta la manecilla
@@ -403,19 +428,29 @@ const shootBullet = async () => {
    */
   removeClass(bullet, "a");
 
-  // console.log({ LEVEL_STATUS });
+  /**
+   * Valida si ha terminado el nivel...
+   */
   if (LEVEL_STATUS !== "default") {
     await delay(600);
-    const classNameModal = `a${LEVEL_STATUS === "lost" ? " l" : ""}`;
-    addClass($(".game-o") as HTMLElement, classNameModal);
 
-    if (LEVEL_STATUS === "lost") {
-      $(".game-o .me h3")!.textContent = `Level ${currentLevel + 1} Failed`;
-    }
+    const modalContainer = ".game-o";
+    addClass(
+      $(modalContainer) as HTMLElement,
+      `a mo ${LEVEL_STATUS[0]}`.trim()
+    );
 
-    // ($(".game-o .ti") as HTMLElement).style.display = "none";
+    const label = LEVEL_STATUS === "lost" ? "Failed" : "Complete";
+    const heading =
+      LEVEL_STATUS === "lost"
+        ? "Oh no"
+        : LEVEL_STATUS === "passed"
+        ? "Great!"
+        : "Not Bad!";
 
-    console.log({ LEVEL_STATUS, currentLevel });
+    const modalTilte = `${modalContainer} .me`;
+    $(`${modalTilte} h1`)!.textContent = heading;
+    $(`${modalTilte} h3`)!.textContent = `Level ${currentLevel + 1} ${label}`;
   }
 };
 
@@ -438,8 +473,7 @@ const loadLevel = (level = 0) => {
   chronometerElement!.textContent = `${MAX_TIME}`;
 
   /**
-   * Tiempo inicial en el que se carga el nivel,
-   * este tiempo se usa como fallback para buscar el ángulo (safari)
+   * Tiempo inicial en el que se carga el nivel
    */
   START_TIME = new Date().getTime();
 
@@ -497,6 +531,7 @@ const startChronometer = () => {
     }, 1000);
   }
 };
+
 // TODO: Validar isInfinity, para el otro modo del juego, si es que queda espacio
 export const initComponent = (level = 0, isInfinity = false) => {
   console.log({ isInfinity });
@@ -514,44 +549,44 @@ export const initComponent = (level = 0, isInfinity = false) => {
     }
   });
 
-  $$("button").forEach((button) => {
-    $on(button as HTMLButtonElement, "click", (e) => {
-      const action = e.target.id;
+  eventButton((action) => {
+    const modalContainer = ".game-o";
 
-      if (["pause", "run", "next"]) {
-        stopChronometer();
-      }
+    if (["pause", "run", "next"]) {
+      stopChronometer();
+    }
 
-      if (["play", "next", "run"].includes(action)) {
-        removeClass($(".game-o") as HTMLElement, "a l");
-      }
+    if (["play", "next", "run"].includes(action)) {
+      removeClass($(modalContainer) as HTMLElement, "a l p f mo");
+    }
 
-      if (action === "pause") {
-        addClass($(".game-o") as HTMLElement, "a");
-        $(".game-o .ti h3")!.textContent = `Level - ${currentLevel + 1}`;
-      }
+    if (action === "pause") {
+      addClass($(modalContainer) as HTMLElement, "a");
+      $(`${modalContainer} .ti h3`)!.textContent = `Level - ${
+        currentLevel + 1
+      }`;
+    }
 
-      if (action === "play") {
-        // TODO: revisar que no se inicie el tiempo si no se había hecho lanzamiento
-        startChronometer();
-      }
+    if (action === "play") {
+      // TODO: revisar que no se inicie el tiempo si no se había hecho lanzamiento
+      startChronometer();
+    }
 
-      if (action === "run") {
+    if (action === "run") {
+      LEVEL_STATUS = "default";
+      loadLevel(currentLevel);
+    }
+
+    if (action === "next") {
+      if (currentLevel + 1 < TOTAL_LEVELS) {
+        currentLevel++;
         LEVEL_STATUS = "default";
         loadLevel(currentLevel);
       }
+    }
 
-      if (action === "next") {
-        if (currentLevel + 1 < TOTAL_LEVELS) {
-          currentLevel++;
-          LEVEL_STATUS = "default";
-          loadLevel(currentLevel);
-        }
-      }
-
-      if (action === "main") {
-        console.log("Ir al lobby");
-      }
-    });
+    if (action === "main") {
+      Screen();
+    }
   });
 };

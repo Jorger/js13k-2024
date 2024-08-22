@@ -1,8 +1,6 @@
 .btn {
   background-color: var(--whi);
-  border-radius: 50%;
   border: none;
-  box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
   color: var(--bs);
   cursor: pointer;
   opacity: 0.8;
@@ -17,4 +15,8 @@
 
 .btn-w span {
   margin-top: 10px;
+}
+
+.btn[disabled] {
+  opacity: 0.5;
 }
