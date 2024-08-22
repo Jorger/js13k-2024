@@ -33,7 +33,6 @@
 }
 
 .game-t .bt {
-  font-size: 30px;
-  height: 45px;
-  width: 45px;
+  font-size: 23px;
+  font-weight: bold;
 }

@@ -9,13 +9,17 @@
   display: flex;
 }
 
-.game-o.l .ti,
-.game-o.l #bt-play {
+.game-o.mo .ti,
+.game-o.mo #bt-play {
   display: none;
 }
 
-.game-o.l .me {
+.game-o.mo .me {
   display: flex;
+}
+
+.game-o.p .sta {
+  display: block;
 }
 
 .game-o .sta {

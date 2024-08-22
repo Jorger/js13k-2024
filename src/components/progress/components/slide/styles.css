@@ -1,0 +1,22 @@
+.sli {
+  align-content: space-evenly;
+  flex-wrap: wrap;
+  gap: 20px;
+}
+
+.sli .btn {
+  font-size: 25px;
+  font-weight: bold;
+}
+
+.sli-w {
+  position: relative;
+}
+
+.sli-w .sta {
+  bottom: -19px;
+  left: 32%;
+  pointer-events: none;
+  position: absolute;
+  text-shadow: 0px -2px 0px var(--bs);
+}

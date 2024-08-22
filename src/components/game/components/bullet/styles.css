@@ -1,7 +1,5 @@
 .bullet {
   position: absolute;
-  /* /* se puede crer sólo una clase para el border radius y reusar */
-  border-radius: 50%;
   /* border: 1px solid red; */
   opacity: 0;
   /* opacity: 0; */
@@ -9,9 +7,7 @@
   /* display: none; */
   background-color: var(--whi);
   /* background-color: red; */
-  z-index: 11;
-  /* TODO: dejarlo sólo una sombra */
-  box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+  z-index: 15;
   /* transition: opacity 100ms ease-out; */
   /* display: none; */
 }
@@ -69,6 +65,7 @@
 
 .bullet.a {
   /* display: block; */
-  transition: transform 100ms ease-out;
+  /* ease-in-out */
+  transition: transform 100ms linear;
   opacity: 1;
 }
