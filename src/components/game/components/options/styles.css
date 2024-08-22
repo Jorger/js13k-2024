@@ -1,0 +1,59 @@
+.game-o {
+  background: var(--bs);
+  position: absolute;
+  z-index: 20;
+  display: none;
+}
+
+.game-o.a {
+  display: flex;
+}
+
+.game-o.l .ti,
+.game-o.l #bt-play {
+  display: none;
+}
+
+.game-o.l .me {
+  display: flex;
+}
+
+.game-o .sta {
+  position: absolute;
+  top: 20px;
+  display: none;
+}
+
+.game-o .t,
+.game-o .ti {
+  position: absolute;
+  width: 100%;
+  padding: 20px;
+}
+
+.game-o,
+.game-o .ti,
+.game-o .me {
+  flex-direction: column;
+}
+
+.game-o .me {
+  display: none;
+}
+
+.game-o .ti {
+  top: 20px;
+}
+
+.game-o .t {
+  bottom: 0;
+  justify-content: space-between;
+}
+
+.game-o #play {
+  font-size: 80px;
+}
+
+.game-o .t .btn {
+  font-size: 45px;
+}

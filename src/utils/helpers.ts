@@ -66,3 +66,6 @@ export const debounce = (fn: Function, delay: number) => {
     t = setTimeout(fn, delay);
   };
 };
+
+export const delay = (ms: number) =>
+  new Promise((resolve) => setTimeout(resolve, ms));

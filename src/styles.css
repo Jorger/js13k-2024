@@ -11,14 +11,16 @@
 
 html,
 body {
-  overscroll-behavior-x: none;
+  -webkit-tap-highlight-color: transparent;
+  -webkit-user-select: none;
   background: #000;
+  color: var(--whi);
   font-family: Arial;
   overflow: hidden;
+  overscroll-behavior-x: none;
   position: fixed;
-  -webkit-user-select: none;
+  text-transform: uppercase;
   user-select: none;
-  -webkit-tap-highlight-color: transparent;
 }
 
 div {

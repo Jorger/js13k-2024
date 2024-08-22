@@ -1,18 +1,20 @@
 import { Bullet, Clock } from "./components";
-import { getLevel } from "../../levels";
+import { getLevel, getTotalLevels } from "../../levels";
+import { HEIGHT, WIDTH } from "../../utils/constants";
 import {
   $,
   $$,
   $on,
   addClass,
   addStyle,
+  delay,
   generateUUID,
   randomNumber,
   removeClass,
   setHtml,
 } from "../../utils/helpers";
-import { HEIGHT, WIDTH } from "../../utils/constants";
 
+const TOTAL_LEVELS = getTotalLevels();
 const BASE_RENDER = ".game-c";
 const BULLET_SIZE = 10;
 let CLOCK_ACTIVE = -1;
@@ -21,6 +23,9 @@ let CLOCKS: (string | number | boolean)[][];
 let START_TIME: number = 0;
 let INTERVAL_CHRONOMETER: NodeJS.Timeout | null;
 let chronometerElement: HTMLElement | null;
+let LEVEL_STATUS: "default" | "passed" | "lost" | "finalized" = "default";
+let currentLevel = 0;
+// let gameOver = false;
 
 const normalizeAngle = (angle = 0) => ((angle % 360) + 360) % 360;
 
@@ -113,43 +118,78 @@ const getClockAngle = () => {
   return angle;
 };
 
+/**
+ * Función que realiza la acción de disprar el elemento del reloj que está girando
+ */
 const shootBullet = async () => {
+  console.clear();
+  /**
+   * Se obtiene el ángulo actual del reloj activo,
+   */
   const clockAngle = getClockAngle();
   const radians = (clockAngle - 90) * (Math.PI / 180);
+  /**
+   * Se obtiene la posición de la bala, la cual es relativa a la posición
+   * del reloj activo...
+   */
   const [startX, startY] = getBulletPosition();
 
-  // Dirección en la que apunta la manecilla
+  console.log({ clockAngle });
+
+  /**
+   * Dirección en la que apunta la manecilla
+   */
   const directionX = Math.cos(radians);
   const directionY = Math.sin(radians);
 
   let currentX = startX;
   let currentY = startY;
+
+  /**
+   * Guarda el índice del reloj con el que colisiona..
+   */
   let indexCollided = -1;
+  /**
+   * Establece las posiciones de destino de la colisión, si es que existe
+   */
   const collisionPoint = { x: 0, y: 0 };
 
+  /**
+   * Se obtienen los obstaculos, en este se deja por fuera el reloj activo
+   */
   const obstacles = CLOCKS.filter((v) => !v[6]);
-
-  // console.log({ obstacles });
-
-  const [, , , id] = CLOCKS[CLOCK_ACTIVE];
-  const clock = $(`#${id}`) as HTMLDivElement;
+  const clockID = CLOCKS[CLOCK_ACTIVE][3];
+  const clock = $(`#${clockID}`) as HTMLDivElement;
   const bullet = $(".bullet") as HTMLDivElement;
+
+  /**
+   * Se guarda el índice del reloj que estaba activado
+   */
   const indexClockRemoved = CLOCK_ACTIVE;
 
   /**
-   * TMP: No hay reloj activo
+   * Se establece que ya no hay reloj activo, esto con el fin de evitar que se
+   * hagan múltiples clicks, mientras se mueve la bala...
    */
   CLOCK_ACTIVE = -1;
 
+  /**
+   * Se muestra la bala, la cual ya está ubicada...
+   */
   addClass(bullet, "a");
 
   // TODO: remover
   // Primero remover todas la que estaban
-  const tmpPath = $$(".tmppath");
-  for (let i = 0; i < tmpPath.length; i++) {
-    tmpPath[i].remove();
-  }
+  // const tmpPath = $$(".tmppath");
+  // for (let i = 0; i < tmpPath.length; i++) {
+  //   tmpPath[i].remove();
+  // }
+  // // TODO: eliminar
+  // let tmpCounter = 0;
 
+  /**
+   * Cálcula el movimiento de la bala y valida si hay colisiones...
+   */
   while (
     currentX >= 0 &&
     currentX <= WIDTH &&
@@ -160,18 +200,22 @@ const shootBullet = async () => {
     currentX += directionX;
     currentY += directionY;
 
-    const newDiv = document.createElement("div");
+    // TODO: Quitar cuando se haga el debug de las colisiones
+    // const newDiv = document.createElement("div");
+    // // Aplicar el transform al div
+    // newDiv.style.transform = `translate(${currentX}px, ${currentY}px)`;
+    // newDiv.style.width = `${BULLET_SIZE}px`;
+    // newDiv.style.height = `${BULLET_SIZE}px`;
+    // newDiv.textContent = `${tmpCounter}`;
+    // // Aplicar la clase al div
+    // newDiv.className = "tmppath";
+    // $(BASE_RENDER)?.append(newDiv);
+    // tmpCounter++;
+    // TODO: hasta aquí se debe auitar...
 
-    // Aplicar el transform al div
-    newDiv.style.transform = `translate(${currentX}px, ${currentY}px)`;
-    newDiv.style.width = `${BULLET_SIZE}px`;
-    newDiv.style.height = `${BULLET_SIZE}px`;
-
-    // Aplicar la clase al div
-    newDiv.className = "tmppath";
-
-    $(BASE_RENDER)?.append(newDiv);
-
+    /**
+     * Se iteran los obtáculos...
+     */
     for (let i = 0; i < obstacles.length; i++) {
       const x = obstacles[i][0] as number;
       const y = obstacles[i][1] as number;
@@ -181,12 +225,32 @@ const shootBullet = async () => {
       const centerY = y + size / 2;
       const radius = size / 2;
 
+      const effectiveRadius = radius + BULLET_SIZE / 2;
+
       // Verificar colisión con el círculo (obstáculo)
       const distance = Math.sqrt(
         (currentX - centerX) ** 2 + (currentY - centerY) ** 2
       );
 
-      if (distance <= radius) {
+      // console.log({
+      //   i,
+      //   directionX,
+      //   directionY,
+      //   tmpCounter,
+      //   size,
+      //   centerX,
+      //   centerY,
+      //   radius,
+      //   currentX,
+      //   currentY,
+      //   finalX: currentX + BULLET_SIZE,
+      //   finalY: currentY + BULLET_SIZE,
+      //   distance,
+      // });
+
+      // if (distance <= radius) {
+      // - BULLET_SIZE / 2
+      if (distance <= effectiveRadius) {
         indexCollided = i;
         collisionPoint.x = currentX;
         collisionPoint.y = currentY;
@@ -223,14 +287,23 @@ const shootBullet = async () => {
     }
   }
 
+  /**
+   * Se detiene la rotación del reloj...
+   */
   addClass(clock, "s");
+
   /**
    * Se oculta el elmento, potencialmeente agregar una animación
    */
+  // TODO: revisar si se puede agregar una animación
   clock.style.display = "none";
 
   // console.log({ clockAngle, startX, startY, directionX, directionY });
 
+  /**
+   * Se obtienen las coordenadas hasta las cuales irá la bala, puede ser los valores
+   * de colisión o hasta el valor que se haya cálculado de movimiento..
+   */
   const coordinates =
     indexCollided >= 0
       ? collisionPoint
@@ -256,15 +329,25 @@ const shootBullet = async () => {
 
   // $(BASE_RENDER)?.append(newDiv);
 
+  /**
+   * Se establece la posición de destino de la bala...
+   */
   addStyle(bullet, {
     transform: `translate(${coordinates.x}px, ${coordinates.y}px)`,
   });
 
+  /**
+   * Se obtiene las animaciones, en este caso el transform...
+   */
   const animations = bullet?.getAnimations().map((a) => a.finished);
 
   // console.log("animations: ", animations);
 
   // const data = await Promise.allSettled(animations);
+  /**
+   * Se Valida si todas las anoimaciones ya han terminado, en este caso
+   * la animación de movimiento...
+   */
   await Promise.allSettled(animations);
 
   // console.log("Termina de animar", data);
@@ -272,37 +355,67 @@ const shootBullet = async () => {
   /**
    * Se remueve el reloj seleccionado del dom...
    */
-  $(`#${id}`)?.remove();
+  $(`#${clockID}`)?.remove();
+
+  /**
+   * Se remueve del array de relojes...
+   */
   CLOCKS.splice(indexClockRemoved, 1);
 
-  // console.log(CLOCKS);
-
-  // Se debe sacar del listado de
-
+  /**
+   * Se valida si ha existido una colisión, en este caso se tiene el índice del
+   * elemento con el cual ha colisionado...
+   */
   if (indexCollided >= 0) {
-    // console.log("HA COLISIONADO");
     CLOCK_ACTIVE = indexCollided;
     CLOCKS[CLOCK_ACTIVE][6] = true;
     const clocksAvailable = CLOCKS.length;
     const gameOver = clocksAvailable === 1;
     const newClassNames = "a" + (gameOver ? " s" : "");
 
-    // console.log({ newClassNames });
-
     addClass($(`#${CLOCKS[CLOCK_ACTIVE][3]}`) as HTMLElement, newClassNames);
-    removeClass(bullet, "a");
 
+    /**
+     * Se obtiene las nueva posición donde quedará la balla...
+     */
     const [newStartX, newStarty] = getBulletPosition();
 
-    if (gameOver) {
-      stopChronometer();
-    }
-
+    /**
+     * Se ubica la bala..
+     */
     addStyle(bullet, {
       transform: `translate(${newStartX}px, ${newStarty}px)`,
     });
+
+    if (gameOver) {
+      LEVEL_STATUS = MAX_TIME > 0 ? "passed" : "finalized";
+      stopChronometer();
+    }
   } else {
+    LEVEL_STATUS = "lost";
     stopChronometer();
+  }
+
+  // console.log("LOS RELOJES QUE QUEDA: ", CLOCKS);
+
+  /**
+   * Se remueve la clase que mostraba la bala...
+   */
+  removeClass(bullet, "a");
+
+  // console.log({ LEVEL_STATUS });
+  if (LEVEL_STATUS !== "default") {
+    await delay(600);
+    const classNameModal = `a${LEVEL_STATUS === "lost" ? " l" : ""}`;
+    addClass($(".game-o") as HTMLElement, classNameModal);
+
+    if (LEVEL_STATUS === "lost") {
+      $(".game-o .me h3")!.textContent = `Level ${currentLevel + 1} Failed`;
+    }
+
+    // ($(".game-o .ti") as HTMLElement).style.display = "none";
+
+    console.log({ LEVEL_STATUS, currentLevel });
   }
 };
 
@@ -322,7 +435,7 @@ const loadLevel = (level = 0) => {
    */
   CLOCK_ACTIVE = data[0] as number;
   MAX_TIME = data[1] as number;
-  chronometerElement!.textContent = `${MAX_TIME}s`;
+  chronometerElement!.textContent = `${MAX_TIME}`;
 
   /**
    * Tiempo inicial en el que se carga el nivel,
@@ -346,6 +459,7 @@ const loadLevel = (level = 0) => {
       i === CLOCK_ACTIVE,
     ];
   });
+  // i, // TODO: remover...
 
   /**
    * Se renderizan los relojes y la bala...
@@ -368,25 +482,30 @@ const stopChronometer = () => {
 const startChronometer = () => {
   stopChronometer();
 
-  chronometerElement!.textContent = `${MAX_TIME}s`;
+  chronometerElement!.textContent = `${MAX_TIME}`;
 
-  INTERVAL_CHRONOMETER = setInterval(() => {
-    MAX_TIME--;
-
-    if (MAX_TIME >= 0) {
-      chronometerElement!.textContent = `${MAX_TIME}s`;
-    } else {
-      stopChronometer();
-    }
-  }, 1000);
+  if (MAX_TIME > 0) {
+    INTERVAL_CHRONOMETER = setInterval(() => {
+      if (MAX_TIME - 1 >= 0) {
+        MAX_TIME--;
+        chronometerElement!.textContent = `${MAX_TIME}`;
+      } else {
+        // TODO: quitar el cronometro cuando llega a cero
+        // $(".game-t .t")
+        stopChronometer();
+      }
+    }, 1000);
+  }
 };
-
-export const initComponent = (level = 0) => {
+// TODO: Validar isInfinity, para el otro modo del juego, si es que queda espacio
+export const initComponent = (level = 0, isInfinity = false) => {
+  console.log({ isInfinity });
+  currentLevel = level;
   chronometerElement = $(".game-t .c");
-  loadLevel(level);
+  loadLevel(currentLevel);
 
   $on($(BASE_RENDER) as HTMLElement, "click", () => {
-    if (CLOCK_ACTIVE >= 0) {
+    if (LEVEL_STATUS === "default" && CLOCK_ACTIVE >= 0) {
       shootBullet();
 
       if (!INTERVAL_CHRONOMETER && MAX_TIME > 0) {
@@ -395,24 +514,44 @@ export const initComponent = (level = 0) => {
     }
   });
 
-  // Para el toolbar
-  const pauseButton = $(".game-t .bt") as HTMLElement;
+  $$("button").forEach((button) => {
+    $on(button as HTMLButtonElement, "click", (e) => {
+      const action = e.target.id;
 
-  if (pauseButton) {
-    $on(pauseButton, "click", () => {
-      // console.log("PAUSA");
-      stopChronometer();
-      loadLevel(level);
+      if (["pause", "run", "next"]) {
+        stopChronometer();
+      }
+
+      if (["play", "next", "run"].includes(action)) {
+        removeClass($(".game-o") as HTMLElement, "a l");
+      }
+
+      if (action === "pause") {
+        addClass($(".game-o") as HTMLElement, "a");
+        $(".game-o .ti h3")!.textContent = `Level - ${currentLevel + 1}`;
+      }
+
+      if (action === "play") {
+        // TODO: revisar que no se inicie el tiempo si no se había hecho lanzamiento
+        startChronometer();
+      }
+
+      if (action === "run") {
+        LEVEL_STATUS = "default";
+        loadLevel(currentLevel);
+      }
+
+      if (action === "next") {
+        if (currentLevel + 1 < TOTAL_LEVELS) {
+          currentLevel++;
+          LEVEL_STATUS = "default";
+          loadLevel(currentLevel);
+        }
+      }
+
+      if (action === "main") {
+        console.log("Ir al lobby");
+      }
     });
-  }
-
-  // console.clear();
-
-  // const interval = setInterval(() => {
-  //   if (CLOCK_ACTIVE >= 0) {
-  //     shootBullet();
-  //   }
-  // }, 100);
-
-  // Se debe agregar el evento click al escenario y a los botones que se requieran
+  });
 };

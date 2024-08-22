@@ -15,6 +15,10 @@
   /* box-shadow: rgba(60, 64, 67, 0.3) 0px 1px 2px 0px,
     rgba(60, 64, 67, 0.15) 0px 1px 3px 1px; */
   /* box-shadow: rgba(0, 0, 0, 0.18) 0px 2px 4px; */
+
+  /* TODO: quitar */
+  /* color: black;
+  font-size: 10px; */
 }
 
 .clock::before,
@@ -51,8 +55,8 @@
       transparent 0
     ),
     linear-gradient(to right bottom, transparent 50%, transparent 0); */
-  background-size: 50% 19%;
-  background-position: 100% 0, 0 0;
+  background-size: 56% 18%;
+  background-position: 110% 2%, 0 2%;
   background-repeat: no-repeat;
 }
 
