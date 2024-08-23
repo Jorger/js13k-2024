@@ -21,7 +21,7 @@ const Progress = () => {
     currentIndex = index;
   };
 
-  const render = /*html*/ `<div class="progress wh jc"><h2>Select Level</h2>${Carousel(
+  const render = /*html*/ `<div class="pro wh jc"><h2>Select Level</h2>${Carousel(
     totalSlides
   )}${Button("prev", "❮", "bta", "", 40)}${Button(
     "next",

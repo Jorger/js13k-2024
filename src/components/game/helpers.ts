@@ -1,4 +1,5 @@
 import { Bullet, Clock } from "./components";
+import { generateRandomClock, getRandomClocks } from "./getRandomClocks";
 import { getLevel, getTotalLevels } from "../../levels";
 import { HEIGHT, WIDTH } from "../../utils/constants";
 import {
@@ -21,11 +22,13 @@ const BULLET_SIZE = 10;
 let CLOCK_ACTIVE = -1;
 let MAX_TIME = 0;
 let CLOCKS: (string | number | boolean)[][];
-let START_TIME: number = 0;
+// let START_TIME: number = 0;
 let INTERVAL_CHRONOMETER: NodeJS.Timeout | null;
 let chronometerElement: HTMLElement | null;
 let LEVEL_STATUS: "default" | "passed" | "lost" | "finalized" = "default";
-let currentLevel = 0;
+let CURRET_LEVEL = 0;
+let IS_INFINITY_LEVEL = false;
+
 // let gameOver = false;
 
 // const normalizeAngle = (angle = 0) => ((angle % 360) + 360) % 360;
@@ -40,7 +43,7 @@ const getClockProperties = () => {
   const miliseconds = randomNumber(0, 9) / 10;
   const speed = seconds + miliseconds;
   // TODO: Para test
-  // const speed = 50;
+  // const speed = 10;
 
   return [direction, speed];
 };
@@ -53,10 +56,11 @@ const getClockProperties = () => {
  */
 const getCurrentRotationAngle = (
   animationDuration = 0,
+  start = 0,
   direction = "normal"
 ) => {
   const now = new Date().getTime();
-  const elapsed = (now - START_TIME) / 1000;
+  const elapsed = (now - start) / 1000;
   const rotationPerSecond = 360 / animationDuration;
   let angle = (elapsed * rotationPerSecond) % 360;
 
@@ -138,6 +142,108 @@ const getBulletPosition = () => {
 //   );
 // };
 
+// const setNewClock = (index = 0, id = "") => {
+//   const { x, y, size } = generateRandomClock(
+//     // @ts-ignore
+//     CLOCKS.map(([x, y, size]) => ({ x, y, size }))
+//   );
+
+//   const [direction, speed] = getClockProperties();
+//   const newClock = [x, y, size, `c-${generateUUID()}`, direction, speed, false, new Date().getTime()];
+//   CLOCKS.push(newClock);
+
+//   const newDiv = document.createElement("div");
+
+//   addStyle(newDiv, {
+//     left: `${x}px`,
+//     top: `${y}px`,
+//     width: `${size}px`,
+//     height: `${size}px`,
+//     "--s": `${speed}s`,
+//     "--d": `${direction}`,
+//   });
+
+//   addClass(newDiv, "clock bor");
+//   newDiv.id = newClock[3] as string;
+//   $(BASE_RENDER)?.append(newDiv);
+
+//   const clock = $(`#${id}`) as HTMLElement;
+
+//   CLOCKS[index][0] = x;
+//   CLOCKS[index][1] = y;
+//   CLOCKS[index][2] = size;
+//   CLOCKS[index][4] = direction;
+//   CLOCKS[index][5] = speed;
+//   CLOCKS[index][6] = false;
+//   CLOCKS[index][7] = new Date().getTime();
+
+//   removeClass(clock, "a s");
+
+//   addStyle(clock, {
+//     display: "block",
+//     left: `${x}px`,
+//     top: `${y}px`,
+//     width: `${size}px`,
+//     height: `${size}px`,
+//     "--s": `${speed}s`,
+//     "--d": `${direction}`,
+//   });
+
+//   // const newDiv = document.createElement("div");
+
+//   // // Aplicar el transform al div
+//   // newDiv.style.transform = `translate(${coordinates.x}px, ${coordinates.y}px)`;
+//   // newDiv.style.width = `${BULLET_SIZE}px`;
+//   // newDiv.style.height = `${BULLET_SIZE}px`;
+
+//   // // Aplicar la clase al div
+//   // newDiv.className = "bullet2";
+
+//   // $(BASE_RENDER)?.append(newDiv);
+
+//   // const newClock = [x, y, size, `c-${generateUUID()}`, direction, speed, false];
+
+//   // CLOCKS.push(newClock);
+//   // $(BASE_RENDER)!.innerHTML += Clock(newClock);
+// };
+
+const setNewClock = () => {
+  const { x, y, size } = generateRandomClock(
+    // @ts-ignore
+    CLOCKS.map(([x, y, size]) => ({ x, y, size }))
+  );
+
+  const [direction, speed] = getClockProperties();
+  const newClock = [
+    x,
+    y,
+    size,
+    `c-${generateUUID()}`,
+    direction,
+    speed,
+    false,
+    new Date().getTime(),
+  ];
+
+  CLOCKS.push(newClock);
+
+  const newDiv = document.createElement("div");
+
+  addStyle(newDiv, {
+    left: `${x}px`,
+    top: `${y}px`,
+    width: `${size}px`,
+    height: `${size}px`,
+  });
+
+  newDiv.style.setProperty("--s", `${speed}s`);
+  newDiv.style.setProperty("--d", direction as string);
+
+  addClass(newDiv, "clock bor");
+  newDiv.id = newClock[3] as string;
+  $(BASE_RENDER)?.append(newDiv);
+};
+
 /**
  * Función que realiza la acción de disprar el elemento del reloj que está girando
  */
@@ -149,6 +255,7 @@ const shootBullet = async () => {
   // const clockAngle = getClockAngle();
   const clockAngle = getCurrentRotationAngle(
     CLOCKS[CLOCK_ACTIVE][5] as number,
+    CLOCKS[CLOCK_ACTIVE][7] as number,
     CLOCKS[CLOCK_ACTIVE][4] as string
   );
 
@@ -177,7 +284,7 @@ const shootBullet = async () => {
   /**
    * Establece las posiciones de destino de la colisión, si es que existe
    */
-  const collisionPoint = { x: 0, y: 0 };
+  const collisionPoint = [0, 0];
 
   /**
    * Se obtienen los obstaculos, en este se deja por fuera el reloj activo
@@ -277,8 +384,8 @@ const shootBullet = async () => {
       // - BULLET_SIZE / 2
       if (distance <= effectiveRadius) {
         indexCollided = i;
-        collisionPoint.x = currentX;
-        collisionPoint.y = currentY;
+        collisionPoint[0] = currentX;
+        collisionPoint[1] = currentY;
         break;
       }
 
@@ -330,12 +437,7 @@ const shootBullet = async () => {
    * de colisión o hasta el valor que se haya cálculado de movimiento..
    */
   const coordinates =
-    indexCollided >= 0
-      ? collisionPoint
-      : {
-          x: currentX,
-          y: currentY,
-        };
+    indexCollided >= 0 ? collisionPoint : [currentX, currentY];
 
   // if (indexCollided >= 0) {
   //   console.log("HAY COLISIÓN", indexCollided);
@@ -358,7 +460,7 @@ const shootBullet = async () => {
    * Se establece la posición de destino de la bala...
    */
   addStyle(bullet, {
-    transform: `translate(${coordinates.x}px, ${coordinates.y}px)`,
+    transform: `translate(${coordinates[0]}px, ${coordinates[1]}px)`,
   });
 
   /**
@@ -377,6 +479,10 @@ const shootBullet = async () => {
 
   // console.log("Termina de animar", data);
 
+  // if (!IS_INFINITY_LEVEL) {
+
+  // }
+
   /**
    * Se remueve el reloj seleccionado del dom...
    */
@@ -391,8 +497,22 @@ const shootBullet = async () => {
    * Se valida si ha existido una colisión, en este caso se tiene el índice del
    * elemento con el cual ha colisionado...
    */
+
+  // console.log({ indexCollided, indexClockRemoved });
+
   if (indexCollided >= 0) {
-    CLOCK_ACTIVE = indexCollided;
+    // if (IS_INFINITY_LEVEL) {
+    //   setNewClock(indexClockRemoved, clockID as string);
+    // }
+
+    if (IS_INFINITY_LEVEL) {
+      setNewClock();
+    }
+
+    // debugger;
+    CLOCK_ACTIVE = CLOCKS.findIndex(
+      (v) => v[3] === obstacles[indexCollided][3]
+    );
     CLOCKS[CLOCK_ACTIVE][6] = true;
     const clocksAvailable = CLOCKS.length;
     const gameOver = clocksAvailable === 1;
@@ -414,11 +534,9 @@ const shootBullet = async () => {
 
     if (gameOver) {
       LEVEL_STATUS = MAX_TIME > 0 ? "passed" : "finalized";
-      stopChronometer();
     }
   } else {
     LEVEL_STATUS = "lost";
-    stopChronometer();
   }
 
   // console.log("LOS RELOJES QUE QUEDA: ", CLOCKS);
@@ -432,13 +550,14 @@ const shootBullet = async () => {
    * Valida si ha terminado el nivel...
    */
   if (LEVEL_STATUS !== "default") {
+    if (!IS_INFINITY_LEVEL) {
+      stopChronometer();
+    }
+
     await delay(600);
 
     const modalContainer = ".game-o";
-    addClass(
-      $(modalContainer) as HTMLElement,
-      `a mo ${LEVEL_STATUS[0]}`.trim()
-    );
+    addClass($(modalContainer) as HTMLElement, `a mo ${LEVEL_STATUS[0]}`);
 
     const label = LEVEL_STATUS === "lost" ? "Failed" : "Complete";
     const heading =
@@ -450,7 +569,7 @@ const shootBullet = async () => {
 
     const modalTilte = `${modalContainer} .me`;
     $(`${modalTilte} h1`)!.textContent = heading;
-    $(`${modalTilte} h3`)!.textContent = `Level ${currentLevel + 1} ${label}`;
+    $(`${modalTilte} h3`)!.textContent = `Level ${CURRET_LEVEL + 1} ${label}`;
   }
 };
 
@@ -458,11 +577,15 @@ const shootBullet = async () => {
  * Función que carga el nivel seleccionado...
  * @param level
  */
-const loadLevel = (level = 0) => {
+const loadLevel = () => {
   /**
    * Obtiene la data del nivel...
    */
-  const data = getLevel(level);
+  const data = !IS_INFINITY_LEVEL ? getLevel(CURRET_LEVEL) : getRandomClocks();
+
+  // const data = getLevel(CURRET_LEVEL);
+
+  // console.log(generateElements());
 
   /**
    * Guadar el reloj seleccionado y el tiempo máximo para
@@ -475,7 +598,12 @@ const loadLevel = (level = 0) => {
   /**
    * Tiempo inicial en el que se carga el nivel
    */
-  START_TIME = new Date().getTime();
+  // START_TIME = new Date().getTime();
+
+  /**
+   * Indicar el estado por defecto...
+   */
+  LEVEL_STATUS = "default";
 
   /**
    * Se establece la data para los relojes...
@@ -491,6 +619,7 @@ const loadLevel = (level = 0) => {
       direction,
       speed,
       i === CLOCK_ACTIVE,
+      new Date().getTime(),
     ];
   });
   // i, // TODO: remover...
@@ -534,12 +663,13 @@ const startChronometer = () => {
 
 // TODO: Validar isInfinity, para el otro modo del juego, si es que queda espacio
 export const initComponent = (level = 0, isInfinity = false) => {
-  console.log({ isInfinity });
-  currentLevel = level;
+  CURRET_LEVEL = level;
+  IS_INFINITY_LEVEL = isInfinity;
   chronometerElement = $(".game-t .c");
-  loadLevel(currentLevel);
+  loadLevel();
 
   $on($(BASE_RENDER) as HTMLElement, "click", () => {
+    // console.log("click: ", {LEVEL_STATUS, CLOCK_ACTIVE});
     if (LEVEL_STATUS === "default" && CLOCK_ACTIVE >= 0) {
       shootBullet();
 
@@ -563,7 +693,7 @@ export const initComponent = (level = 0, isInfinity = false) => {
     if (action === "pause") {
       addClass($(modalContainer) as HTMLElement, "a");
       $(`${modalContainer} .ti h3`)!.textContent = `Level - ${
-        currentLevel + 1
+        CURRET_LEVEL + 1
       }`;
     }
 
@@ -574,14 +704,14 @@ export const initComponent = (level = 0, isInfinity = false) => {
 
     if (action === "run") {
       LEVEL_STATUS = "default";
-      loadLevel(currentLevel);
+      loadLevel();
     }
 
     if (action === "next") {
-      if (currentLevel + 1 < TOTAL_LEVELS) {
-        currentLevel++;
+      if (CURRET_LEVEL + 1 < TOTAL_LEVELS) {
+        CURRET_LEVEL++;
         LEVEL_STATUS = "default";
-        loadLevel(currentLevel);
+        loadLevel();
       }
     }
 

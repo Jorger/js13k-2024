@@ -1,28 +1,28 @@
-.progress {
+.pro {
   flex-direction: column;
   position: relative;
 }
 
-.progress h2 {
+.pro h2 {
   margin-bottom: 20px;
 }
 
-.progress .btm {
+.pro .btm {
   margin-top: 20px;
 }
 
-.progress .bta {
+.pro .bta {
   font-size: 20px;
 }
 
-.progress #bt-prev,
-.progress #bt-next {
+.pro #bt-prev,
+.pro #bt-next {
   position: absolute;
   top: 50%;
   left: 8px;
 }
 
-.progress #bt-next {
+.pro #bt-next {
   left: unset;
   right: 8px;
 }

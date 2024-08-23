@@ -8,8 +8,8 @@ import Screen from "./Screen";
 
 setHtml($(`#${ROOT}`), Container());
 
-// Screen();
-Screen("Progress");
+Screen("Game", { l: 0, f: true });
+// Screen("Progress");
 
 $on(document as any, "contextmenu", (event) => event.preventDefault());
 
