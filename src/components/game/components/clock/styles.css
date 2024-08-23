@@ -2,7 +2,7 @@
   --bc: var(--bs);
   --ci: radial-gradient(circle, var(--bc) 30%, rgba(0, 0, 0, 0) 0);
 
-  background-color: var(--whi);
+  background: var(--whi);
   background-image: var(--ci);
   background-position: 50% 50%;
   background-repeat: no-repeat;
@@ -16,12 +16,13 @@
 
   /* TODO: quitar */
   /* color: black;
-  font-size: 10px; */
+  font-size: 10px;
+  font-weight: bold; */
 }
 
 .clock::before,
 .clock::after {
-  animation: rotate var(--s) linear infinite;
+  animation: ro var(--s) linear infinite;
   animation-direction: var(--d);
   animation-play-state: running;
   content: "";
@@ -71,7 +72,7 @@
   --bc: var(--whi);
   --cn: radial-gradient(circle, var(--bs) 30%, rgba(0, 0, 0, 0) 0);
   background-color: rgba(0, 0, 0, 0.6);
-  /* Se puede crear dinamicamente */
+  /* TODO: Se puede crear dinamicamente */
   background-image: var(--ci), var(--cn), var(--cn), var(--cn), var(--cn);
   background-position: 50% 50%, 50% 2%, 50% 98%, 2% 50%, 98% 50%;
   background-size: 50% 50%, 15% 15%, 15% 15%, 15% 15%, 15% 15%;
@@ -84,7 +85,7 @@
   background: var(--bc);
 }
 
-@keyframes rotate {
+@keyframes ro {
   0% {
     transform: rotate(0deg);
   }

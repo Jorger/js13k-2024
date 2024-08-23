@@ -1,6 +1,6 @@
 :root {
   --bs: #008ef2;
-  --whi: white;
+  --whi: #fff;
 }
 
 /* Estilos globales */
@@ -12,7 +12,7 @@
 html,
 body {
   -webkit-tap-highlight-color: transparent;
-  -webkit-user-select: none;
+  /* -webkit-user-select: none; */
   background: #000;
   color: var(--whi);
   font-family: Arial;

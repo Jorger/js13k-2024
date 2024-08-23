@@ -1,5 +1,5 @@
 .btn {
-  background-color: var(--whi);
+  background: var(--whi);
   border: none;
   color: var(--bs);
   cursor: pointer;
