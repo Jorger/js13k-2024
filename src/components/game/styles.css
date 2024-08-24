@@ -2,3 +2,9 @@
   position: relative;
   cursor: pointer;
 }
+
+.game.in #bt-next,
+.game.in .s {
+  display: none;
+}
+

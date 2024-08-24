@@ -28,6 +28,7 @@ let chronometerElement: HTMLElement | null;
 let LEVEL_STATUS: "default" | "passed" | "lost" | "finalized" = "default";
 let CURRET_LEVEL = 0;
 let IS_INFINITY_LEVEL = false;
+let COUNTER_INFINITY = 0;
 
 // let gameOver = false;
 
@@ -428,6 +429,7 @@ const shootBullet = async () => {
    * Se oculta el elmento, potencialmeente agregar una animación
    */
   // TODO: revisar si se puede agregar una animación
+  // Creo que se puede quitar esta linea
   clock.style.display = "none";
 
   // console.log({ clockAngle, startX, startY, directionX, directionY });
@@ -506,6 +508,9 @@ const shootBullet = async () => {
     // }
 
     if (IS_INFINITY_LEVEL) {
+      // Se incrementa la cantidad de elementos eliminados.
+      COUNTER_INFINITY++;
+      chronometerElement!.textContent = `${COUNTER_INFINITY}`;
       setNewClock();
     }
 
@@ -550,26 +555,29 @@ const shootBullet = async () => {
    * Valida si ha terminado el nivel...
    */
   if (LEVEL_STATUS !== "default") {
-    if (!IS_INFINITY_LEVEL) {
-      stopChronometer();
-    }
-
-    await delay(600);
-
-    const modalContainer = ".game-o";
-    addClass($(modalContainer) as HTMLElement, `a mo ${LEVEL_STATUS[0]}`);
-
-    const label = LEVEL_STATUS === "lost" ? "Failed" : "Complete";
-    const heading =
+    let label = `Level ${CURRET_LEVEL + 1} ${LEVEL_STATUS === "lost" ? "Failed" : "Complete"}`;
+    let heading =
       LEVEL_STATUS === "lost"
         ? "Oh no"
         : LEVEL_STATUS === "passed"
         ? "Great!"
         : "Not Bad!";
 
+    if (IS_INFINITY_LEVEL) {
+      heading = `${COUNTER_INFINITY}`;
+      label = "Score";
+    } else {
+      stopChronometer();
+    }
+
+    // Interrupcion para mostrar el modal final
+    await delay(600);
+
+    const modalContainer = ".game-o";
+    addClass($(modalContainer) as HTMLElement, `a mo ${LEVEL_STATUS[0]}`);
     const modalTilte = `${modalContainer} .me`;
     $(`${modalTilte} h1`)!.textContent = heading;
-    $(`${modalTilte} h3`)!.textContent = `Level ${CURRET_LEVEL + 1} ${label}`;
+    $(`${modalTilte} h3`)!.textContent = label;
   }
 };
 
@@ -593,6 +601,11 @@ const loadLevel = () => {
    */
   CLOCK_ACTIVE = data[0] as number;
   MAX_TIME = data[1] as number;
+  /**
+   * LLevará el contador de los elementos eliminados en la
+   * modalidad infinita
+   */
+  COUNTER_INFINITY = 0;
   chronometerElement!.textContent = `${MAX_TIME}`;
 
   /**
@@ -692,9 +705,11 @@ export const initComponent = (level = 0, isInfinity = false) => {
 
     if (action === "pause") {
       addClass($(modalContainer) as HTMLElement, "a");
-      $(`${modalContainer} .ti h3`)!.textContent = `Level - ${
-        CURRET_LEVEL + 1
-      }`;
+      if(!IS_INFINITY_LEVEL) {
+        $(`${modalContainer} .ti h3`)!.textContent = `Level - ${
+          CURRET_LEVEL + 1
+        }`;
+      }
     }
 
     if (action === "play") {
