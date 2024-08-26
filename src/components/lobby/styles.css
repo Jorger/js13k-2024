@@ -1,8 +1,38 @@
+.lobby {
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 80px 0;
+  position: relative;
+}
+
 .lobby-b {
-  display: flex;
-  justify-content: center;
+  width: 90%;
+}
+
+.lobby-s,
+.lobby-o {
+  justify-content: space-around;
+}
+
+.lobby-o {
+  margin-top: 60px;
+}
+
+.lobby-o a {
+  width: 60px;
+  height: 60px;
+  text-decoration: none;
+}
+
+.lobby-o .btn {
+  font-size: 30px;
 }
 
 .lobby-bu {
-  font-size: 70px;
+  font-size: 100px;
+}
+
+.lobby-l {
+  margin-top: 30px;
+  color: var(--whi);
 }

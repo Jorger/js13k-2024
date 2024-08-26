@@ -320,6 +320,8 @@ const shootBullet = async () => {
   // // TODO: eliminar
   // let tmpCounter = 0;
 
+  let additionalCollisionCounter = 0;
+
   /**
    * Cálcula el movimiento de la bala y valida si hay colisiones...
    */
@@ -349,75 +351,88 @@ const shootBullet = async () => {
     /**
      * Se iteran los obtáculos...
      */
-    for (let i = 0; i < obstacles.length; i++) {
-      const x = obstacles[i][0] as number;
-      const y = obstacles[i][1] as number;
-      const size = obstacles[i][2] as number;
 
-      const centerX = x + size / 2;
-      const centerY = y + size / 2;
-      const radius = size / 2;
+    if (indexCollided < 0) {
+      for (let i = 0; i < obstacles.length; i++) {
+        const x = obstacles[i][0] as number;
+        const y = obstacles[i][1] as number;
+        const size = obstacles[i][2] as number;
 
-      const effectiveRadius = radius + BULLET_SIZE / 2;
+        const centerX = x + size / 2;
+        const centerY = y + size / 2;
+        const radius = size / 2;
 
-      // Verificar colisión con el círculo (obstáculo)
-      const distance = Math.sqrt(
-        (currentX - centerX) ** 2 + (currentY - centerY) ** 2
-      );
+        const effectiveRadius = radius + BULLET_SIZE / 2;
 
-      // console.log({
-      //   i,
-      //   directionX,
-      //   directionY,
-      //   tmpCounter,
-      //   size,
-      //   centerX,
-      //   centerY,
-      //   radius,
-      //   currentX,
-      //   currentY,
-      //   finalX: currentX + BULLET_SIZE,
-      //   finalY: currentY + BULLET_SIZE,
-      //   distance,
-      // });
+        // Verificar colisión con el círculo (obstáculo)
+        const distance = Math.sqrt(
+          (currentX - centerX) ** 2 + (currentY - centerY) ** 2
+        );
 
-      // if (distance <= radius) {
-      // - BULLET_SIZE / 2
-      if (distance <= effectiveRadius) {
-        indexCollided = i;
+        // console.log({
+        //   i,
+        //   directionX,
+        //   directionY,
+        //   tmpCounter,
+        //   size,
+        //   centerX,
+        //   centerY,
+        //   radius,
+        //   currentX,
+        //   currentY,
+        //   finalX: currentX + BULLET_SIZE,
+        //   finalY: currentY + BULLET_SIZE,
+        //   distance,
+        // });
+
+        // if (distance <= radius) {
+        // - BULLET_SIZE / 2
+        if (distance <= effectiveRadius) {
+          indexCollided = i;
+          // collisionPoint[0] = currentX;
+          // collisionPoint[1] = currentY;
+          // break;
+        }
+
+        // const position = {
+        //   start: {
+        //     x: obstacles[i][0] as number,
+        //     y: obstacles[i][1] as number,
+        //   },
+        //   end: {
+        //     x: (obstacles[i][0] as number) + (obstacles[i][2] as number),
+        //     y: (obstacles[i][1] as number) + (obstacles[i][2] as number),
+        //   },
+        // };
+
+        // const collidedX =
+        //   currentX >= position.start.x && currentX <= position.end.x;
+        // const collidedY =
+        //   currentY >= position.start.y && currentY <= position.end.y;
+
+        // if (collidedX && collidedY) {
+        //   indexCollided = i;
+        //   collisionPoint.x = currentX;
+        //   collisionPoint.y = currentY;
+        //   break;
+        // }
+        // console.log(data);
+      }
+    } else {
+      additionalCollisionCounter++;
+      /**
+       * Para que el punto de colisión esté más "adentro" del elemento
+       */
+      if (additionalCollisionCounter === 10) {
         collisionPoint[0] = currentX;
         collisionPoint[1] = currentY;
         break;
       }
-
-      // const position = {
-      //   start: {
-      //     x: obstacles[i][0] as number,
-      //     y: obstacles[i][1] as number,
-      //   },
-      //   end: {
-      //     x: (obstacles[i][0] as number) + (obstacles[i][2] as number),
-      //     y: (obstacles[i][1] as number) + (obstacles[i][2] as number),
-      //   },
-      // };
-
-      // const collidedX =
-      //   currentX >= position.start.x && currentX <= position.end.x;
-      // const collidedY =
-      //   currentY >= position.start.y && currentY <= position.end.y;
-
-      // if (collidedX && collidedY) {
-      //   indexCollided = i;
-      //   collisionPoint.x = currentX;
-      //   collisionPoint.y = currentY;
-      //   break;
-      // }
-      // console.log(data);
     }
 
-    if (indexCollided >= 0) {
-      break;
-    }
+    // if (indexCollided >= 0) {
+    //   break;
+    // }
   }
 
   /**
@@ -430,7 +445,17 @@ const shootBullet = async () => {
    */
   // TODO: revisar si se puede agregar una animación
   // Creo que se puede quitar esta linea
-  clock.style.display = "none";
+  // clock.style.display = "none";
+
+  /**
+   * Se remueve el reloj seleccionado del dom...
+   */
+  $(`#${clockID}`)?.remove();
+
+  /**
+   * Se remueve del array de relojes...
+   */
+  CLOCKS.splice(indexClockRemoved, 1);
 
   // console.log({ clockAngle, startX, startY, directionX, directionY });
 
@@ -486,16 +511,6 @@ const shootBullet = async () => {
   // }
 
   /**
-   * Se remueve el reloj seleccionado del dom...
-   */
-  $(`#${clockID}`)?.remove();
-
-  /**
-   * Se remueve del array de relojes...
-   */
-  CLOCKS.splice(indexClockRemoved, 1);
-
-  /**
    * Se valida si ha existido una colisión, en este caso se tiene el índice del
    * elemento con el cual ha colisionado...
    */
@@ -514,14 +529,25 @@ const shootBullet = async () => {
       setNewClock();
     }
 
-    // debugger;
+    /**
+     * Se obtiene el índice real del elemento con el cual
+     * ha colisionado, ya que indexCollided es el índice del
+     * elemento del listado de obstacles, y como está filtrada
+     * el índice es diferente, además se elimina el elemento que estaba
+     * activo
+     */
     CLOCK_ACTIVE = CLOCKS.findIndex(
       (v) => v[3] === obstacles[indexCollided][3]
     );
+
+    /**
+     * Se especidica que el elemento está activado...
+     */
     CLOCKS[CLOCK_ACTIVE][6] = true;
+
     const clocksAvailable = CLOCKS.length;
     const gameOver = clocksAvailable === 1;
-    const newClassNames = "a" + (gameOver ? " s" : "");
+    const newClassNames = "a co" + (gameOver ? " s" : "");
 
     addClass($(`#${CLOCKS[CLOCK_ACTIVE][3]}`) as HTMLElement, newClassNames);
 
@@ -544,8 +570,6 @@ const shootBullet = async () => {
     LEVEL_STATUS = "lost";
   }
 
-  // console.log("LOS RELOJES QUE QUEDA: ", CLOCKS);
-
   /**
    * Se remueve la clase que mostraba la bala...
    */
@@ -555,7 +579,9 @@ const shootBullet = async () => {
    * Valida si ha terminado el nivel...
    */
   if (LEVEL_STATUS !== "default") {
-    let label = `Level ${CURRET_LEVEL + 1} ${LEVEL_STATUS === "lost" ? "Failed" : "Complete"}`;
+    let label = `Level ${CURRET_LEVEL + 1} ${
+      LEVEL_STATUS === "lost" ? "Failed" : "Complete"
+    }`;
     let heading =
       LEVEL_STATUS === "lost"
         ? "Oh no"
@@ -705,7 +731,7 @@ export const initComponent = (level = 0, isInfinity = false) => {
 
     if (action === "pause") {
       addClass($(modalContainer) as HTMLElement, "a");
-      if(!IS_INFINITY_LEVEL) {
+      if (!IS_INFINITY_LEVEL) {
         $(`${modalContainer} .ti h3`)!.textContent = `Level - ${
           CURRET_LEVEL + 1
         }`;
