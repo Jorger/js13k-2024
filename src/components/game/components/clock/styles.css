@@ -85,11 +85,24 @@
   background: var(--bc);
 }
 
+.clock.co {
+  animation: pu 0.5s;
+}
+
 @keyframes ro {
   0% {
     transform: rotate(0deg);
   }
   100% {
     transform: rotate(360deg);
+  }
+}
+
+@keyframes pu {
+  0% {
+    box-shadow: 0 0 0 0px black;
+  }
+  100% {
+    box-shadow: 0 0 7px 25px rgba(0, 112, 244, 0);
   }
 }

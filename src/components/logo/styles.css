@@ -1,0 +1,10 @@
+.logo {
+  font-size: 65px;
+  font-weight: bold;
+  position: relative;
+  text-shadow: 0px 3px 8px rgba(0, 0, 0, 0.24);
+}
+
+.logo #l2 {
+  margin-left: 50px;
+}

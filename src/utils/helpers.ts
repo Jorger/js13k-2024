@@ -80,3 +80,46 @@ export const eventButton = (cb: (id: string) => void) => {
 
 export const fillArray = (length = 1) =>
   Array.from({ length }, (_, index) => index);
+
+export const shareLink = (data: ShareData) => {
+  if ("share" in navigator) {
+    navigator
+      .share(data)
+      .then((_) => alert("Thanks for sharing!"))
+      .catch(() => alert("Sharing failed :("));
+  } else {
+    window.open(
+      `https://x.com/share?url=${encodeURIComponent(data.url || "")}`,
+      "_blank"
+    );
+  }
+};
+
+export const clickOutside = (element: any, callback: () => void) => {
+  const main = $("body") as HTMLElement;
+
+  // Define una función manejadora de eventos
+  const handler = (e: MouseEvent) => {
+    const isInside = element.contains(e.target as Node);
+
+    if (!isInside) {
+      callback();
+      e.stopPropagation();
+    }
+  };
+
+  $on(main, "click", handler);
+
+  return () => {
+    main.removeEventListener("click", handler);
+  };
+};
+
+export const isValidJson = (json = "") => {
+  try {
+    JSON.parse(json);
+    return true;
+  } catch (_) {
+    return false;
+  }
+};

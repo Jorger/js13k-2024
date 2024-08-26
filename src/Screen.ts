@@ -2,8 +2,8 @@ import Game from "./components/game";
 import Lobby from "./components/lobby";
 import Progress from "./components/progress";
 
-type Params = Record<string, any>;
-type Screens = "Lobby" | "Game" | "Progress";
+export type Params = Record<string, any>;
+export type Screens = "Lobby" | "Game" | "Progress";
 
 type HandlerType = {
   [key: string]: (params: Params) => void;
