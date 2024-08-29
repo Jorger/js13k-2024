@@ -1,71 +1,11 @@
 .bullet {
   position: absolute;
-  /* border: 1px solid red; */
   opacity: 0;
-  /* opacity: 0; */
-  /* transition: all 100ms linear; */
-  /* display: none; */
   background: var(--whi);
-  /* background-color: red; */
   z-index: 15;
-  /* transition: opacity 100ms ease-out; */
-  /* display: none; */
 }
-
-/* TODO; position absiluta, intentar dejarlo en una sola clase, ya que se repite */
-/* .bullet::after {
-  content: "";
-  position: absolute;
-  width: 100%;
-  height: 100%;
-  background: radial-gradient(
-      circle,
-      rgba(255, 0, 0, 0.7) 0%,
-      rgba(255, 255, 255, 0) 80%
-    ),
-    radial-gradient(circle, rgba(0, 255, 0, 0.7) 0%, rgba(255, 255, 255, 0) 80%),
-    radial-gradient(circle, rgba(0, 0, 255, 0.7) 0%, rgba(255, 255, 255, 0) 80%);
-  border-radius: 50%;
-  animation: particleAnimation 2s infinite;
-  transform: translate(-50%, -50%);
-  opacity: 1;
-}
-
-@keyframes particleAnimation {
-  0% {
-    opacity: 1;
-    transform: translate(-50%, -50%) scale(1);
-  }
-  100% {
-    opacity: 0;
-    transform: translate(-50%, -50%) scale(1.5);
-  }
-} */
-
-/* TODO: Borrar */
-/* .tmppath {
-  border-radius: 50%;
-  border: 1px solid white;
-  opacity: 0.2;
-  position: absolute;
-  z-index: 11;
-  font-size: 5px;
-} */
-
-/* .bullet2, */
-/* .bullet2 {
-  border: 1px solid black;
-  z-index: 11;
-}
-
-.bullet {
-  background-color: red;
-  z-index: 20;
-} */
 
 .bullet.a {
-  /* display: block; */
-  /* ease-in-out */
   transition: transform 100ms linear;
   opacity: 1;
 }

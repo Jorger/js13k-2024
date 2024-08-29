@@ -56,9 +56,6 @@ export const addStyle = (
   }
 };
 
-// export const isMobile = (): boolean =>
-//   /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
-
 export const debounce = (fn: Function, delay: number) => {
   var t: number;
   return function () {

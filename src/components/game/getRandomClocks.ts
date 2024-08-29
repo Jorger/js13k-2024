@@ -70,9 +70,5 @@ export const getRandomClocks = () => {
     }
   }
 
-  return [
-    randomNumber(0, TOTAL_ELEMENTS - 1),
-    0,
-    elements.map((v) => [v.x, v.y, v.size]),
-  ];
+  return [0, elements.map((v) => [v.x, v.y, v.size])];
 };

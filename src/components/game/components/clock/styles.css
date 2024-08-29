@@ -1,4 +1,5 @@
 .clock {
+  --n: 1s;
   --bc: var(--bs);
   --ci: radial-gradient(circle, var(--bc) 30%, rgba(0, 0, 0, 0) 0);
 
@@ -10,14 +11,7 @@
   border: 3px solid var(--whi);
   position: absolute;
   opacity: 0.8;
-  /* box-shadow: rgba(60, 64, 67, 0.3) 0px 1px 2px 0px,
-    rgba(60, 64, 67, 0.15) 0px 1px 3px 1px; */
-  /* box-shadow: rgba(0, 0, 0, 0.18) 0px 2px 4px; */
-
-  /* TODO: quitar */
-  /* color: black;
-  font-size: 10px;
-  font-weight: bold; */
+  animation: bounceIn var(--n);
 }
 
 .clock::before,
@@ -48,12 +42,6 @@
   left: 43%;
   top: -10%;
   width: 13%;
-  /* background-image: linear-gradient(
-      to left bottom,
-      transparent 50%,
-      transparent 0
-    ),
-    linear-gradient(to right bottom, transparent 50%, transparent 0); */
   background-size: 56% 18%;
   background-position: 110% 2%, 0 2%;
   background-repeat: no-repeat;
@@ -100,7 +88,7 @@
 
 @keyframes pu {
   0% {
-    box-shadow: 0 0 0 0px black;
+    box-shadow: 0 0 0 0px rgba(0, 0, 0, 0.6);
   }
   100% {
     box-shadow: 0 0 7px 25px rgba(0, 112, 244, 0);
