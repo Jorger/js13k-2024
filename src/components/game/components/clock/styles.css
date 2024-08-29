@@ -60,7 +60,6 @@
   --bc: var(--whi);
   --cn: radial-gradient(circle, var(--bs) 30%, rgba(0, 0, 0, 0) 0);
   background-color: rgba(0, 0, 0, 0.6);
-  /* TODO: Se puede crear dinamicamente */
   background-image: var(--ci), var(--cn), var(--cn), var(--cn), var(--cn);
   background-position: 50% 50%, 50% 2%, 50% 98%, 2% 50%, 98% 50%;
   background-size: 50% 50%, 15% 15%, 15% 15%, 15% 15%, 15% 15%;

@@ -1,8 +1,8 @@
-#bt-theme {
+#bt-th {
   position: relative;
 }
 
-#bt-theme span {
+#bt-th span {
   background: var(--whi);
   border-radius: 10px;
   box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
@@ -14,7 +14,7 @@
   width: 200px;
 }
 
-#bt-theme span.show {
+#bt-th span.show {
   display: block;
 }
 

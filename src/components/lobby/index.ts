@@ -18,30 +18,27 @@ import Logo from "../logo";
 import Screen, { Params, Screens } from "../../Screen";
 import Theme from "../theme";
 
+// ["sounds", "♫"],
 const Lobby = () => {
-  const render = /*html*/ `<div class="lobby wh jc">${Logo()}<div class="lobby-b"><div class="lobby-s jc">${[
+  const render = /*html*/ `<div class="lb wh jc">${Logo()}<div class="lb-b"><div class="lb-s jc">${[
     ["progress", "✩"],
     ["infinite", "∞"],
   ]
-    .map((v) => Button(v[0], v[1], "lobby-bu", v[0], 130))
+    .map((v) => Button(v[0], v[1], "lb-bu", v[0], 130))
     .join(
       ""
-    )}</div><div class="lobby-o jc"><a href="https://bio.link/jorgerub" target="_blank" class="btn bor jc">☻</a>${[
-    ["theme", "⚙"],
-    ["sounds", "♫"],
-    ["share", "⛓"],
+    )}</div><div class="lb-o jc"><a href="https://bio.link/jorgerub" target="_blank" class="btn bor jc">☻</a>${[
+    ["th", "⚙"],
+    ["sh", "⛓"],
   ]
-    .map((v) => Button(v[0], v[1], "", v[0] === "theme" ? Theme() : "", 60))
+    .map((v) => Button(v[0], v[1], "", v[0] === "th" ? Theme() : "", 60))
     .join(
       ""
-    )}</div><a href="https://js13kgames.com/" target="_blank" class="lobby-l jc">Js13k 2024</a></div></div>`;
+    )}</div><a href="https://js13kgames.com/" target="_blank" class="lb-l jc">Js13k 2024</a></div></div>`;
 
   setHtml($(`#${CONTAINER}`), render);
 
-  const cleanup = clickOutside(
-    $("#bt-theme"),
-    () => isOpen() && closeTooltip()
-  );
+  const cleanup = clickOutside($("#bt-th"), () => isOpen() && closeTooltip());
 
   eventButton((action) => {
     // console.log({ action });
@@ -58,7 +55,7 @@ const Lobby = () => {
       Screen(screen, data);
     }
 
-    if (action === "share") {
+    if (action === "sh") {
       shareLink({
         title: "🕗 13 Hours",
         text: "Play 13 Hours",
@@ -66,7 +63,7 @@ const Lobby = () => {
       });
     }
 
-    if (action === "theme") {
+    if (action === "th") {
       toogleTooltip();
     }
 

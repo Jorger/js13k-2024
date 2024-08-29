@@ -1,38 +1,38 @@
-.lobby {
+.lb {
   flex-direction: column;
   justify-content: space-between;
   padding: 80px 0;
   position: relative;
 }
 
-.lobby-b {
+.lb-b {
   width: 90%;
 }
 
-.lobby-s,
-.lobby-o {
+.lb-s,
+.lb-o {
   justify-content: space-around;
 }
 
-.lobby-o {
+.lb-o {
   margin-top: 60px;
 }
 
-.lobby-o a {
+.lb-o a {
   width: 60px;
   height: 60px;
   text-decoration: none;
 }
 
-.lobby-o .btn {
+.lb-o .btn {
   font-size: 30px;
 }
 
-.lobby-bu {
+.lb-bu {
   font-size: 100px;
 }
 
-.lobby-l {
+.lb-l {
   margin-top: 30px;
   color: var(--whi);
 }

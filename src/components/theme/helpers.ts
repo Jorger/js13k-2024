@@ -7,7 +7,7 @@ const NAME_PROPERTY = "color";
 const SELECT_COLOR_CLASS = "sel";
 const DEFAULT_INDEX_COLOR = 6;
 
-export const tooltipElement = () => $("#bt-theme span") as HTMLElement;
+export const tooltipElement = () => $("#bt-th span") as HTMLElement;
 
 export const isOpen = () =>
   tooltipElement()?.classList?.contains(TOOLTIP_SHOW_CLASS);

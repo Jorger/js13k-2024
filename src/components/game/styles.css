@@ -1,10 +1,9 @@
-.game {
+.ga {
   position: relative;
   cursor: pointer;
 }
 
-.game.in #bt-next,
-.game.in .s {
+.ga.in #bt-next,
+.ga.in .s {
   display: none;
 }
-

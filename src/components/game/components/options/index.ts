@@ -3,7 +3,7 @@ import Button from "../../../button";
 import Start from "../../../start";
 
 export default () =>
-  /*html*/ `<div class="game-o wh jc"><div class="ti jc"><h1>Game Paused</h1><h3></h3></div>${Button(
+  /*html*/ `<div class="g-o wh jc"><div class="ti jc"><h1>Game Paused</h1><h3></h3></div>${Button(
     "play",
     "➜",
     "",

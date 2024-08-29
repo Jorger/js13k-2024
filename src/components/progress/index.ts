@@ -6,7 +6,6 @@ import Button from "../button";
 import Screen from "../../Screen";
 
 const Progress = () => {
-  // TODO, determinar el número de slides, dependiendo de la cantidad de niveles...
   const totalSlides = 3;
   let currentIndex = 0;
 

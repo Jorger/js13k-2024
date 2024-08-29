@@ -10,7 +10,9 @@ interface GameProps {
 }
 
 const Game = ({ l = 0, f = false }: GameProps) => {
-  const render = /*html*/ `<div class="game wh ${f ? "in" : ""}">${Options()}${Toolbar()}<div class="game-c wh"></div></div>`;
+  const render = /*html*/ `<div class="ga wh ${
+    f ? "in" : ""
+  }">${Options()}${Toolbar()}<div class="g-c wh"></div></div>`;
 
   setHtml($(`#${CONTAINER}`), render);
 

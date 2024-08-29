@@ -4,7 +4,7 @@ import { randomNumber } from "../../utils/helpers";
 interface Element {
   x: number;
   y: number;
-  size: number;
+  s: number;
 }
 
 const MIN_X = 10;
@@ -17,14 +17,14 @@ const TOTAL_ELEMENTS = 11;
 
 const isOverlapping = (element1: Element, element2: Element): boolean => {
   const left1 = element1.x;
-  const right1 = element1.x + element1.size;
+  const right1 = element1.x + element1.s;
   const top1 = element1.y;
-  const bottom1 = element1.y + element1.size;
+  const bottom1 = element1.y + element1.s;
 
   const left2 = element2.x;
-  const right2 = element2.x + element2.size;
+  const right2 = element2.x + element2.s;
   const top2 = element2.y;
-  const bottom2 = element2.y + element2.size;
+  const bottom2 = element2.y + element2.s;
 
   const isHorizontalOverlap = !(right1 <= left2 || left1 >= right2);
   const isVerticalOverlap = !(bottom1 <= top2 || top1 >= bottom2);
@@ -34,21 +34,21 @@ const isOverlapping = (element1: Element, element2: Element): boolean => {
 
 export const generateRandomClock = (existingElements: Element[]): Element => {
   let valid = false;
-  let newElement: Element = { x: 0, y: 0, size: 0 };
+  let newElement: Element = { x: 0, y: 0, s: 0 };
 
   while (!valid) {
     const x = randomNumber(MIN_X, MAX_X);
     const y = randomNumber(MIN_Y, MAX_Y);
-    const size = randomNumber(MIN_SIZE, MAX_SIZE);
+    const s = randomNumber(MIN_SIZE, MAX_SIZE);
 
-    newElement = { x, y, size };
+    newElement = { x, y, s };
 
     // Revisa si esta dentro del escenario y además que no haya overlaping con otros elementos
     if (
       newElement.x >= MIN_X &&
       newElement.y >= MIN_Y &&
-      newElement.x + newElement.size <= MAX_X &&
-      newElement.y + newElement.size <= MAX_Y &&
+      newElement.x + newElement.s <= MAX_X &&
+      newElement.y + newElement.s <= MAX_Y &&
       !existingElements.some((existingElement) =>
         isOverlapping(existingElement, newElement)
       )
@@ -70,5 +70,5 @@ export const getRandomClocks = () => {
     }
   }
 
-  return [0, elements.map((v) => [v.x, v.y, v.size])];
+  return [0, elements.map((v) => [v.x, v.y, v.s])];
 };

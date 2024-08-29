@@ -1,4 +1,4 @@
-.game-t {
+.g-t {
   align-items: center;
   display: flex;
   justify-content: space-between;
@@ -10,7 +10,7 @@
   z-index: 2;
 }
 
-.game-t .t {
+.g-t .t {
   display: flex;
   justify-content: center;
   align-items: center;
@@ -18,27 +18,27 @@
   transition: all 300ms;
 }
 
-.game-t .t.h {
+.g-t .t.h {
   opacity: 0;
 }
 
-.game-t .c {
+.g-t .c {
   font-size: 30px;
   margin-left: 10px;
 }
 
-.game-t .s {
+.g-t .s {
   display: flex;
   flex-direction: column;
   align-items: center;
 }
 
-.game-t .s span {
+.g-t .s span {
   display: block;
   font-size: 13px;
 }
 
-.game-t .bt {
+.g-t .bt {
   font-size: 23px;
   font-weight: bold;
 }

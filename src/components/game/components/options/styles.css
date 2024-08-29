@@ -1,63 +1,63 @@
-.game-o {
+.g-o {
   background: var(--bs);
   position: absolute;
   z-index: 20;
   display: none;
 }
 
-.game-o.a {
+.g-o.a {
   display: flex;
 }
 
-.game-o.mo .ti,
-.game-o.mo #bt-play {
+.g-o.mo .ti,
+.g-o.mo #bt-play {
   display: none;
 }
 
-.game-o.mo .me {
+.g-o.mo .me {
   display: flex;
 }
 
-.game-o.p .sta {
+.g-o.P .sta {
   display: block;
 }
 
-.game-o .sta {
+.g-o .sta {
   position: absolute;
   top: 20px;
   display: none;
 }
 
-.game-o .t,
-.game-o .ti {
+.g-o .t,
+.g-o .ti {
   position: absolute;
   width: 100%;
   padding: 20px;
 }
 
-.game-o,
-.game-o .ti,
-.game-o .me {
+.g-o,
+.g-o .ti,
+.g-o .me {
   flex-direction: column;
 }
 
-.game-o .me {
+.g-o .me {
   display: none;
 }
 
-.game-o .ti {
+.g-o .ti {
   top: 20px;
 }
 
-.game-o .t {
+.g-o .t {
   bottom: 0;
   justify-content: space-between;
 }
 
-.game-o #play {
+.g-o #play {
   font-size: 80px;
 }
 
-.game-o .t .btn {
+.g-o .t .btn {
   font-size: 45px;
 }

@@ -22,14 +22,15 @@ import {
 import Screen from "../../Screen";
 
 const TOTAL_LEVELS = getTotalLevels();
-const BASE_RENDER = ".game-c";
+const BASE_RENDER = ".g-c";
+const modalContainer = ".g-o";
 const BULLET_SIZE = 10;
 let CLOCK_ACTIVE = -1;
 let MAX_TIME = 0;
 let CLOCKS: (string | number | boolean)[][];
 let INTERVAL_CHRONOMETER: NodeJS.Timeout | null;
 let chronometerElement: HTMLElement | null;
-let LEVEL_STATUS: "default" | "passed" | "lost" | "finalized" = "default";
+let LEVEL_STATUS: "D" | "P" | "L" | "F" = "D";
 let CURRET_LEVEL = 0;
 let IS_INFINITY_LEVEL = false;
 let COUNTER_INFINITY = 0;
@@ -90,16 +91,16 @@ const getBulletPosition = () => {
  * Crear un nuevo reloj para la jugabilidad infinito...
  */
 const setNewClock = () => {
-  const { x, y, size } = generateRandomClock(
+  const { x, y, s } = generateRandomClock(
     // @ts-ignore
-    CLOCKS.map(([x, y, size]) => ({ x, y, size }))
+    CLOCKS.map(([x, y, s]) => ({ x, y, s }))
   );
 
   const [direction, speed] = getClockProperties();
   const newClock = [
     x,
     y,
-    size,
+    s,
     `c-${generateUUID()}`,
     direction,
     speed,
@@ -114,8 +115,8 @@ const setNewClock = () => {
   addStyle(newDiv, {
     left: `${x}px`,
     top: `${y}px`,
-    width: `${size}px`,
-    height: `${size}px`,
+    width: `${s}px`,
+    height: `${s}px`,
   });
 
   newDiv.style.setProperty("--s", `${speed}s`);
@@ -334,14 +335,14 @@ const shootBullet = async () => {
     });
 
     if (gameOver) {
-      LEVEL_STATUS = MAX_TIME > 0 ? "passed" : "finalized";
+      LEVEL_STATUS = MAX_TIME > 0 ? "P" : "F";
 
       if (MAX_TIME > 0) {
         saveLevelPassed(CURRET_LEVEL);
       }
     }
   } else {
-    LEVEL_STATUS = "lost";
+    LEVEL_STATUS = "L";
   }
 
   /**
@@ -352,14 +353,14 @@ const shootBullet = async () => {
   /**
    * Valida si ha terminado el nivel...
    */
-  if (LEVEL_STATUS !== "default") {
+  if (LEVEL_STATUS !== "D") {
     let label = `Level ${CURRET_LEVEL + 1} ${
-      LEVEL_STATUS === "lost" ? "Failed" : "Complete"
+      LEVEL_STATUS === "L" ? "Failed" : "Complete"
     }`;
     let heading =
-      LEVEL_STATUS === "lost"
+      LEVEL_STATUS === "L"
         ? "Oh no"
-        : LEVEL_STATUS === "passed"
+        : LEVEL_STATUS === "P"
         ? "Great!"
         : "Not Bad!";
 
@@ -376,8 +377,7 @@ const shootBullet = async () => {
     /**
      * Se muestra el modal final de game over...
      */
-    const modalContainer = ".game-o";
-    addClass($(modalContainer) as HTMLElement, `a mo ${LEVEL_STATUS[0]}`);
+    addClass($(modalContainer) as HTMLElement, `a mo ${LEVEL_STATUS}`);
     const modalTilte = `${modalContainer} .me`;
     $(`${modalTilte} h1`)!.textContent = heading;
     $(`${modalTilte} h3`)!.textContent = label;
@@ -411,7 +411,7 @@ const loadLevel = () => {
   /**
    * Indicar el estado por defecto...
    */
-  LEVEL_STATUS = "default";
+  LEVEL_STATUS = "D";
 
   /**
    * Indica que no se ha iniciado el juego, en este caso cuandos e hace click
@@ -422,7 +422,7 @@ const loadLevel = () => {
   /**
    * Para mostrar el reloj de nuevo si es que se había ocultado...
    */
-  removeClass($(".game-t .t") as HTMLElement, "h");
+  removeClass($(".g-t .t") as HTMLElement, "h");
 
   const totalCLock = (data[1] as number[][]).length;
   const animationTime = 3 / totalCLock;
@@ -475,7 +475,7 @@ const startChronometer = () => {
         chronometerElement!.textContent = `${MAX_TIME}`;
 
         if (MAX_TIME === 0) {
-          addClass($(".game-t .t") as HTMLElement, "h");
+          addClass($(".g-t .t") as HTMLElement, "h");
         }
       } else {
         stopChronometer();
@@ -492,11 +492,11 @@ const startChronometer = () => {
 export const initComponent = (level = 0, isInfinity = false) => {
   CURRET_LEVEL = level;
   IS_INFINITY_LEVEL = isInfinity;
-  chronometerElement = $(".game-t .c");
+  chronometerElement = $(".g-t .c");
   loadLevel();
 
   $on($(BASE_RENDER) as HTMLElement, "click", () => {
-    if (LEVEL_STATUS === "default" && CLOCK_ACTIVE >= 0) {
+    if (LEVEL_STATUS === "D" && CLOCK_ACTIVE >= 0) {
       shootBullet();
 
       if (!GAME_STARTED) {
@@ -510,14 +510,12 @@ export const initComponent = (level = 0, isInfinity = false) => {
   });
 
   eventButton((action) => {
-    const modalContainer = ".game-o";
-
     if (["pause", "run", "next"]) {
       stopChronometer();
     }
 
     if (["play", "next", "run"].includes(action)) {
-      removeClass($(modalContainer) as HTMLElement, "a l p f mo");
+      removeClass($(modalContainer) as HTMLElement, "a L P F mo");
     }
 
     if (action === "pause") {
@@ -547,13 +545,13 @@ export const initComponent = (level = 0, isInfinity = false) => {
     }
 
     if (action === "run") {
-      LEVEL_STATUS = "default";
+      LEVEL_STATUS = "D";
       loadLevel();
     }
 
     if (action === "next") {
       CURRET_LEVEL++;
-      LEVEL_STATUS = "default";
+      LEVEL_STATUS = "D";
       loadLevel();
     }
 

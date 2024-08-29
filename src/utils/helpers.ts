@@ -82,8 +82,8 @@ export const shareLink = (data: ShareData) => {
   if ("share" in navigator) {
     navigator
       .share(data)
-      .then((_) => alert("Thanks for sharing!"))
-      .catch(() => alert("Sharing failed :("));
+      .then((_) => alert("😊"))
+      .catch(() => alert("😔"));
   } else {
     window.open(
       `https://x.com/share?url=${encodeURIComponent(data.url || "")}`,
