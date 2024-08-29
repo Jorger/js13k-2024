@@ -1,3 +1,4 @@
+export const MIN_STARS_NEXT_LEVEL = 10;
 export const HEIGHT = 732;
 export const WIDTH = 412;
 export const ROOT = "root";

@@ -48,7 +48,6 @@ div {
 }
 
 /* Animations */
-/*
 @keyframes bounceIn {
   from,
   20%,
@@ -60,12 +59,12 @@ div {
   }
 
   0% {
-    opacity: 0;
+    /* opacity: 0; */
     transform: scale3d(0.3, 0.3, 0.3);
   }
 
   20% {
-    transform: scale3d(1.1, 1.1, 1.1);
+    transform: scale3d(1, 1, 1);
   }
 
   40% {
@@ -73,9 +72,8 @@ div {
   }
 
   60% {
-    opacity: 1;
-
-    transform: scale3d(1.03, 1.03, 1.03);
+    /* opacity: 1; */
+    transform: scale3d(1, 1, 1);
   }
 
   80% {
@@ -83,9 +81,7 @@ div {
   }
 
   to {
-    opacity: 1;
-
+    /* opacity: 1; */
     transform: scale3d(1, 1, 1);
   }
 }
-*/
