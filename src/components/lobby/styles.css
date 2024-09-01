@@ -1,7 +1,7 @@
 .lb {
   flex-direction: column;
   justify-content: space-between;
-  padding: 80px 0;
+  padding: 60px 0;
   position: relative;
 }
 
@@ -12,10 +12,6 @@
 .lb-s,
 .lb-o {
   justify-content: space-around;
-}
-
-.lb-o {
-  margin-top: 60px;
 }
 
 .lb-o a {

@@ -15,6 +15,10 @@ const MIN_SIZE = 40;
 const MAX_SIZE = 120;
 const TOTAL_ELEMENTS = 11;
 
+/**
+ * Función que valida si un elemento (reloj) queda encima de otro...
+ * @returns
+ */
 const isOverlapping = (element1: Element, element2: Element): boolean => {
   const left1 = element1.x;
   const right1 = element1.x + element1.s;
@@ -32,6 +36,11 @@ const isOverlapping = (element1: Element, element2: Element): boolean => {
   return isHorizontalOverlap && isVerticalOverlap;
 };
 
+/**
+ * Función que genera de forma aleatoria un nuevo reloj y valida si es válido
+ * quedando dentro del escenario y no encima de otros elementos...
+ * @returns
+ */
 export const generateRandomClock = (existingElements: Element[]): Element => {
   let valid = false;
   let newElement: Element = { x: 0, y: 0, s: 0 };
@@ -60,6 +69,10 @@ export const generateRandomClock = (existingElements: Element[]): Element => {
   return newElement;
 };
 
+/**
+ * Genera un listado de relojes de forma aleatoria...
+ * @returns
+ */
 export const getRandomClocks = () => {
   const elements: Element[] = [];
 

@@ -1,25 +1,10 @@
-#bt-th {
-  position: relative;
-}
-
-#bt-th span {
-  background: var(--whi);
-  border-radius: 10px;
-  box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
-  display: none;
-  left: -95%;
-  padding: 10px;
-  position: absolute;
-  top: -110px;
-  width: 200px;
-}
-
-#bt-th span.show {
-  display: block;
-}
-
 .th {
   flex-wrap: wrap;
+  margin: 40px 0;
+}
+
+.tb-bu {
+  margin-top: 15px;
   gap: 10px;
 }
 
@@ -32,16 +17,4 @@
 
 .th button.sel {
   border-width: 3px;
-}
-
-.th::after {
-  border-style: solid;
-  border-width: 10px;
-  content: "";
-  height: 0;
-  left: 35%;
-  position: absolute;
-  top: 99%;
-  width: 0;
-  border-color: var(--whi) transparent transparent transparent;
 }

@@ -369,6 +369,7 @@ const shootBullet = async () => {
       label = "Score";
     } else {
       stopChronometer();
+      validateNextButton();
     }
 
     // Interrupcion para mostrar el modal final
@@ -485,6 +486,23 @@ const startChronometer = () => {
 };
 
 /**
+ * Valida si el botón siguiente estará o no habilitado...
+ */
+const validateNextButton = () => {
+  if (!IS_INFINITY_LEVEL) {
+    const nextLevelValue = CURRET_LEVEL + 1;
+
+    $(`${modalContainer} .ti h3`)!.textContent = `Level - ${nextLevelValue}`;
+
+    const isValidNextLevel = nextLevelValue < TOTAL_LEVELS;
+    const nextLevelDisabled = isLevelBlocked(Math.floor(nextLevelValue / 20));
+
+    const isNextDisabled = !isValidNextLevel || nextLevelDisabled;
+    ($("#next") as HTMLButtonElement).disabled = isNextDisabled;
+  }
+};
+
+/**
  * Función principal del componente...
  * @param level
  * @param isInfinity
@@ -520,22 +538,7 @@ export const initComponent = (level = 0, isInfinity = false) => {
 
     if (action === "pause") {
       addClass($(modalContainer) as HTMLElement, "a");
-
-      if (!IS_INFINITY_LEVEL) {
-        const nextLevelValue = CURRET_LEVEL + 1;
-
-        $(
-          `${modalContainer} .ti h3`
-        )!.textContent = `Level - ${nextLevelValue}`;
-
-        const isValidNextLevel = nextLevelValue < TOTAL_LEVELS;
-        const nextLevelDisabled = isLevelBlocked(
-          Math.floor(nextLevelValue / 20)
-        );
-
-        const isNextDisabled = !isValidNextLevel || nextLevelDisabled;
-        ($("#next") as HTMLButtonElement).disabled = isNextDisabled;
-      }
+      validateNextButton();
     }
 
     if (action === "play") {

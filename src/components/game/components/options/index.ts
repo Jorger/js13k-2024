@@ -25,14 +25,3 @@ export default () =>
     "Next Level",
     80
   )}</div></div>`;
-
-/*
-✰ ⏵
-${Button("main", "✖", "", "Main Menu")}
-    ${Button("next", "⏵", "", "Next Level")}
-*/
-
-// ▶️
-// 🕨
-
-// <h1></h1><h3></h3>

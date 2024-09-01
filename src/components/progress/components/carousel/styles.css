@@ -18,9 +18,21 @@
 .car-s {
   flex: none;
   scroll-snap-align: start;
+  position: relative;
 }
 
 /* Para que el scroll no se vea al tener overflow:hidden en el contenedor */
 .car-w::-webkit-scrollbar {
   display: none;
+}
+
+.car-m {
+  position: absolute;
+  z-index: 10;
+  pointer-events: none;
+}
+
+.car-m span {
+  background-color: black;
+  padding: 10px;
 }

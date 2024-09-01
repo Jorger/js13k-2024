@@ -92,26 +92,6 @@ export const shareLink = (data: ShareData) => {
   }
 };
 
-export const clickOutside = (element: any, callback: () => void) => {
-  const main = $("body") as HTMLElement;
-
-  // Define una función manejadora de eventos
-  const handler = (e: MouseEvent) => {
-    const isInside = element.contains(e.target as Node);
-
-    if (!isInside) {
-      callback();
-      e.stopPropagation();
-    }
-  };
-
-  $on(main, "click", handler);
-
-  return () => {
-    main.removeEventListener("click", handler);
-  };
-};
-
 export const isValidJson = (json = "") => {
   try {
     JSON.parse(json);

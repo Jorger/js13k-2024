@@ -26,11 +26,24 @@ export const saveLevelPassed = (level = 0) => {
   }
 };
 
-export const isLevelBlocked = (slide = 0) => {
-  if (slide === 0) return false;
-
+/**
+ * Calcula y devuleve las estrellas necesarias para bloquear un nivel...
+ */
+export const startsRemain = (slide = 0) => {
   const totalLevelsPassed = LEVEL_PASSED.length;
   const totalRequired = slide * MIN_STARS_NEXT_LEVEL;
+  const remain = totalRequired - totalLevelsPassed;
+  return [totalLevelsPassed, totalRequired, remain];
+};
+
+/**
+ * Valida si un nivel está bloqueado...
+ * @param slide
+ * @returns
+ */
+export const isLevelBlocked = (slide = 0) => {
+  if (slide === 0) return false;
+  const [totalLevelsPassed, totalRequired] = startsRemain(slide);
 
   return totalLevelsPassed < totalRequired;
 };
