@@ -6,7 +6,16 @@ const LEVEL_PASSED: number[] = getValueFromCache<number[]>("levels", []);
 
 export const getTotalLevels = () => LEVELS.length;
 
-export const getLevel = (level = 0) => LEVELS[level];
+export const getLevel = (level = 0) => {
+  const [time, ...data] = LEVELS[level];
+
+  const clocks = [];
+  for (let i = 0; i < data.length; i += 3) {
+    clocks.push(data.slice(i, 3 * (i + 1)));
+  }
+
+  return [time, clocks];
+};
 
 /**
  * Para saber si el nivel ya se ha pasado...
