@@ -10,7 +10,7 @@ La Maldición de los 13 Relojes: En un mundo donde la superstición y las leyend
 
 En 13 Hours, tu misión es eliminar todos los relojes que aparecen en cada escenario antes de que se agote el tiempo asignado para el nivel. Si logras completar esta tarea en menos del tiempo límite, recibirás una estrella como recompensa. Cuantas más estrellas consigas, más niveles podrás desbloquear.
 
-El juego ofrece un total de 60 niveles, cada uno con diferentes niveles de dificultad y tiempos de completación. Además, 13 Hours incluye una modalidad infinita en la que puedes eliminar relojes sin restricción de tiempo, permitiéndote jugar y desafiarte a ti mismo de forma ilimitada.
+El juego ofrece un total de 60 niveles, cada uno con diferentes niveles de dificultad y tiempo para completarlo. Además, 13 Hours incluye una modalidad infinita en la que puedes eliminar relojes sin restricción de tiempo, permitiéndote jugar y desafiarte a ti mismo de forma ilimitada.
 
 Juego desarrollado para la [Js13k](https://js13kgames.com/) cuyo tema era [Triskaidekaphobia](https://medium.com/js13kgames/js13kgames-2024-start-and-theme-announcement-5d734f77da68).
 
