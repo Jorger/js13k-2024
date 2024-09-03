@@ -44,7 +44,7 @@ En esta modalidad, puedes eliminar relojes sin un límite de tiempo. La modalida
 Los siguientes ítems serían ideales agregarlos al juego, no fue posible debido a que sobrepasaba los 13k.
 
 - [ ] Guardar mejor resultado en la modlidad infinita.
-- [ ] Agregar sonidos.
+- [ ] Agregar sonidos (implementado en esta [rama](https://github.com/Jorger/js13k-2024/pull/10))
 - [ ] Validar service workers
 - [ ] Agregar más niveles, es posible usar el [editor](https://mrj8fm.csb.app/) creado para ello.
 
